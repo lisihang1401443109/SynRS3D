@@ -93,6 +93,9 @@ def get_arguments():
     parser.add_argument("--fl_threshold", type=float, default=0.8, help="threshold, ϵ in formula [4]")
     parser.add_argument("--fl_weight", type=float, default=1., help="weight of feature constraint loss")
     parser.add_argument("--fl_decrement", type=float, default=0.05, help="This value determines how much the threshold decreases per layer")
+    
+    # stylization mix parameter
+    parser.add_argument("--stylized_p", type=float, default=0., help="probability of stylized version to mix in")
 
     return parser.parse_args()
     
@@ -235,7 +238,10 @@ def main():
                                 combine_class=args.combine_class,
                                 apply_da=args.apply_da,
                                 da_aug_paras=da_aug_paras,
-                                tgt_root_dir = tgt_data_path
+                                tgt_root_dir = tgt_data_path,
+                                
+                                #! stylization
+                                stylized_p = args.stylized_p
                                 )
     syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 
@@ -299,7 +305,11 @@ def main():
     
     for i_iter in range(args.start_iters, args.num_steps):
         # training on source
-        batch = next(iter(syn_trainloader))
+        try:
+            batch = next(iter(syn_trainloader))
+        except Exception as e:
+            logger.info(f"HEY! Skipped a batch here: {str(e)}")
+            continue
         images, dsms = batch['image'], batch['dsm']
         ss_masks = batch.get('ss_mask') if args.multi_task else None
 

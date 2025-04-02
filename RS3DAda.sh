@@ -1,11 +1,13 @@
 #!/bin/bash
-train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
+# train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
+train_set=('grid_g005_mid_v2')
 test_set=('DFC18' 'DFC19_JAX' 'DFC19_OMA' 'geonrw_rural' 'geonrw_urban' 'OGC_ARG' 'OGC_ATL')
 
 images_file=('train.txt' 'test_syn.txt' 'train.txt')
 da=('FDA' 'HM' 'PDA')
 
 python train_dpt_RS3DAda.py \
+--root_dir /mnt/data/SynRS3D/data \
 --datasets ${train_set[*]} \
 --test_datasets ${test_set[*]} \
 --ood_datasets ${test_set[*]} \
@@ -19,7 +21,7 @@ python train_dpt_RS3DAda.py \
 --PDA_blend_ratio 0.8 1.0 \
 --PDA_type standard \
 --tgt_datasets ${test_set[*]} \
---snapshot_dir /path/to/your/project/SynRS3D/snapshot_rs3dada \
+--snapshot_dir /mnt/data/SynRS3D/snapshot_rs3dada \
 --images_file ${images_file[*]} \
 --batch_size 1 \
 --learning_rate 1e-6 \

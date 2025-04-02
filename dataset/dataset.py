@@ -19,7 +19,11 @@ class MultiTaskDataSet(data.Dataset):
                  apply_da: List[str]=[],
                  da_aug_paras: Optional[Dict] = None,
                  tgt_root_dir: List[str]=[],
-                 ignore_label=255):
+                 ignore_label=255,
+                 
+                 #! modification: stylization
+                 stylized_p=0,
+                 ):
         
         self.root = root
         self.is_training = is_training
@@ -34,6 +38,9 @@ class MultiTaskDataSet(data.Dataset):
         
         self.tgt_files_path = []
         self.max_da_images = max_da_images
+        
+        #! modification: stylization
+        self.stylized_p=stylized_p
         
         if self.apply_da:
             for dir in tgt_root_dir:
@@ -62,15 +69,29 @@ class MultiTaskDataSet(data.Dataset):
             with open(list_path, 'r') as file:
                 img_ids_in_dir = [line.strip() for line in file]
                 self.img_ids.extend(img_ids_in_dir)
-                if self.multi_task:
-                    self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
+                if self.stylized_p > 0. and os.path.islink(os.path.join(root_dir, "stylized")) and random.random() < self.stylized_p:
+                    if self.multi_task:
+                        self.files.extend([{'img': os.path.join(root_dir, f"stylized/{name}.tif"),
+                                            'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
+                                            'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
+                                            'name': name} for name in img_ids_in_dir])
+                    else:
+                        self.files.extend([{'img': os.path.join(root_dir, f"stylized/{name}.tif"),
                                         'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
-                                        'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
                                         'name': name} for name in img_ids_in_dir])
                 else:
-                    self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
-                                    'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
-                                    'name': name} for name in img_ids_in_dir])
+                    #? original
+                    if self.multi_task:
+                        self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
+                                            'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
+                                            'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
+                                            'name': name} for name in img_ids_in_dir])
+                    else:
+                        self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
+                                        'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
+                                        'name': name} for name in img_ids_in_dir])
+                
+                
         random.shuffle(self.files)
         if max_iters is not None:
             self.files = (self.files * int(np.ceil(float(max_iters) / len(self.files))))[:max_iters]
@@ -126,7 +147,10 @@ class MultiTaskDataSet(data.Dataset):
             # Apply transformations if specified
             if self.transforms:
                 masks_to_transform = [result_dict.get("dsm"), result_dict.get("ss_mask", None)]
-                augmented = self.transforms(image=image, masks=[mask for mask in masks_to_transform if mask is not None])
+                ready_mask = [np.copy(mask) for mask in masks_to_transform if mask is not None]
+                #for mask in ready_mask:
+                    # print('------masks strides: ', mask.strides)
+                augmented = self.transforms(image=image, masks=[np.copy(mask) for mask in ready_mask if mask is not None])
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
@@ -196,7 +220,7 @@ class PesudoDataSet(data.Dataset):
 
             # Apply transformations if specified
             if self.transforms:
-                augmented = self.transforms(image=image)
+                augmented = self.transforms(image=image.copy())
                 image = augmented['image']
                 
                 # Update the result dict with transformed data
@@ -208,6 +232,8 @@ class PesudoDataSet(data.Dataset):
             print(f"Error reading file {datafiles['img']} or {datafiles['dsm']}: {e}")
             return None
         
+#! We likely don't need this anyways
+#! Nope we definitely need this 
 class OEMDataSet(data.Dataset):
     def __init__(self, root, 
                  is_training=True, 
@@ -250,8 +276,12 @@ class OEMDataSet(data.Dataset):
             with open(list_path, 'r') as file:
                 img_ids_in_dir = [line.strip() for line in file]
                 self.img_ids.extend(img_ids_in_dir)
-                self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
-                                    'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
+                #! The line below caused a issue because the train.txt is stored in the format xxx.tif
+                # self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
+                #                     'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
+                #                     'name': name} for name in img_ids_in_dir])
+                self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}"),
+                                    'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}"),
                                     'name': name} for name in img_ids_in_dir])
         random.shuffle(self.files)
         
@@ -301,7 +331,10 @@ class OEMDataSet(data.Dataset):
             # Apply transformations if specified
             if self.transforms:
                 masks_to_transform = [result_dict.get("ss_mask", None)]
-                augmented = self.transforms(image=image, masks=[mask for mask in masks_to_transform if mask is not None])
+                ready_mask = [np.copy(mask) for mask in masks_to_transform if mask is not None]
+                #for mask in ready_mask:
+                    # print('------masks strides: ', mask.strides)
+                augmented = self.transforms(image=image, masks=[np.copy(mask) for mask in ready_mask if mask is not None])
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
@@ -317,5 +350,7 @@ class OEMDataSet(data.Dataset):
             return result_dict
         
         except IOError as e:
-            print(f"Error reading file {datafiles['img']} or {datafiles['dsm']}: {e}")
+            #! This threw an error for OEM dataset because 'dsm' is not a key
+            # print(f"Error reading file {datafiles['img']} or {datafiles['dsm']}: {e}")
+            print(f"Error reading file {datafiles.get('img', 'img_file')} or {datafiles.get('dsm', 'dsm_file')}: {e}")
             return None

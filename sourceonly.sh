@@ -1,18 +1,20 @@
 #!/bin/bash
 train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
+# train_set=('grid_g005_mid_v2')
 test_set=('DFC18' 'DFC19_JAX' 'DFC19_OMA' 'geonrw_rural' 'geonrw_urban' 'OGC_ARG' 'OGC_ATL')
 
 images_file=('train.txt' 'test_syn.txt' 'train.txt')
 da=()
 
 python train_dpt_sourceonly.py \
+--root_dir /mnt/data/SynRS3D/data \
 --datasets ${train_set[*]} \
 --test_datasets ${test_set[*]} \
 --ood_datasets ${test_set[*]} \
 --crop_size 392 \
 --encoder vitl \
 --decoder DPT \
---snapshot_dir /path/to/your/project/SynRS3D/snapshot_src_only \
+--snapshot_dir /mnt/data/SynRS3D/snapshot_src_only \
 --images_file ${images_file[*]} \
 --batch_size 1 \
 --learning_rate 1e-6 \

@@ -34,6 +34,26 @@ from albumentations import Compose, Normalize, CenterCrop
 from albumentations.pytorch import ToTensorV2
 
 
+# def get_arguments():
+#     """Parse all the arguments provided from the CLI.
+
+#     Returns:
+#       A list of parsed arguments.
+#     """
+#     parser = argparse.ArgumentParser(description="Evaluation Script")
+#     parser.add_argument("--restore_path", type=str, default='', help="trained model path")
+#     parser.add_argument("--num_classes", type=int, default=8, help="#classes of land cover branch")
+#     parser.add_argument("--eval_oem", action="store_true", help="eval oem or not")
+#     parser.add_argument("--test_datasets",  nargs='*', type=str, default=['DFC18'], help="data name list")
+#     parser.add_argument("--ood_datasets",  nargs='*', type=str, default=['DFC18'], help="data name list")
+#     parser.add_argument("--images_file", nargs='*', type=str, default=['train.txt', 'test_syn.txt', 'test.txt'], help="images txt file for [training, evaluation, style transfer]")
+
+#     parser.add_argument("--save_num_images", type=int, default=5, help="How many images to save.")
+#     parser.add_argument("--snapshot_dir", type=str, default='snapshot', help="Where to save snapshots of the model.")
+
+#     return parser.parse_args()
+    
+
 def get_arguments():
     """Parse all the arguments provided from the CLI.
 
@@ -41,29 +61,48 @@ def get_arguments():
       A list of parsed arguments.
     """
     parser = argparse.ArgumentParser(description="Evaluation Script")
-    parser.add_argument("--restore_path", type=str, default='', help="trained model path")
-    parser.add_argument("--num_classes", type=int, default=8, help="#classes of land cover branch")
-    parser.add_argument("--eval_oem", action="store_true", help="eval oem or not")
-    parser.add_argument("--test_datasets",  nargs='*', type=str, default=['DFC18'], help="data name list")
-    parser.add_argument("--ood_datasets",  nargs='*', type=str, default=['DFC18'], help="data name list")
-    parser.add_argument("--images_file", nargs='*', type=str, default=['train.txt', 'test_syn.txt', 'test.txt'], help="images txt file for [training, evaluation, style transfer]")
-
-    parser.add_argument("--save_num_images", type=int, default=5, help="How many images to save.")
-    parser.add_argument("--snapshot_dir", type=str, default='snapshot', help="Where to save snapshots of the model.")
-
-    return parser.parse_args()
     
+    # Model-related arguments
+    parser.add_argument("--restore_path", type=str, default='', help="Path to the trained model.")
+    parser.add_argument("--num_classes", type=int, default=8, help="Number of classes for the segmentation branch.")
+    parser.add_argument("--encoder", type=str, default='vitl', help="Model encoder type.")
+    parser.add_argument("--decoder", type=str, default='dpt', help="Model decoder type.")
+    parser.add_argument("--pretrained", action="store_true", help="Use pretrained weights.")
+    
+    # GPU-related arguments
+    parser.add_argument("--gpu", type=str, default='0', help="Specify GPU device to use.")
+    
+    # Dataset-related arguments
+    parser.add_argument("--root_dir", type=str, default='/mnt/data/SynRS3D/data', help="Root directory of the datasets.")
+    parser.add_argument("--test_datasets", nargs='*', type=str, default=['DFC18'], help="List of test datasets.")
+    parser.add_argument("--ood_datasets", nargs='*', type=str, default=['DFC18'], help="List of out-of-distribution datasets.")
+    parser.add_argument("--images_file", nargs='*', type=str, default=['train.txt', 'test_syn.txt', 'test.txt'], help="Image files used for training and testing.")
+    parser.add_argument("--combine_class", action="store_true", help="Whether to combine classes during evaluation.")
+    
+    # Evaluation-related arguments
+    parser.add_argument("--eval_oem", action="store_true", help="Evaluate OEM datasets.")
+    parser.add_argument("--multi_task", action="store_true", help="Use multi-task evaluation.")
+    parser.add_argument("--segment_r", type=int, default=5, help="Segmentation radius.")
+    parser.add_argument("--even_0_3", action="store_true", help="Balance data between 0-3 meters.")
+    parser.add_argument("--even_3_b", action="store_true", help="Balance data above 3 meters.")
+    
+    # Logging-related arguments
+    parser.add_argument("--snapshot_dir", type=str, default='snapshot', help="Directory to save snapshots of the model.")
+    parser.add_argument("--save_num_images", type=int, default=5, help="Number of images to save during evaluation.")
+    
+    return parser.parse_args()
+
 def main():
     args = get_arguments()
     """Create the model and start the training."""
     if not os.path.exists(args.snapshot_dir):
         os.makedirs(args.snapshot_dir)
 
-    logger = get_console_file_logger(name=args.decoder + '_' + args.encoder, level=logging.INFO, logdir=args.snapshot_dir)
+    logger = get_console_file_logger(name='temp', level=logging.INFO, logdir=args.snapshot_dir)
     
     writer = SummaryWriter(log_dir=args.snapshot_dir + '/runs')
     
-    args_datasets = set(args.datasets)
+    args_datasets = set(args.test_datasets)
     train_dataset_type = get_dataset_category(args_datasets)
 
     if not args.gpu == 'None':
@@ -104,15 +143,16 @@ def main():
     ToTensorV2()
     ])
    
-    oemloaders = {}
-    oemdataset = OEMDataSet([os.path.join(args.root_dir,'OEM')], 
-                            is_training=False,
-                            images_file=args.images_file,
-                            transforms=testing_transforms,
-                            combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
-                            )
-    oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False)
-    oemloaders['OEM']=oemloader
+    # ! supressed because won't have OEM dataset as structured
+    # oemloaders = {}
+    # oemdataset = OEMDataSet([os.path.join(args.root_dir,'OEM')], 
+    #                         is_training=False,
+    #                         images_file=args.images_file,
+    #                         transforms=testing_transforms,
+    #                         combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
+    #                         )
+    # oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False)
+    # oemloaders['OEM']=oemloader
 
     testloaders = {}
     for d in test_data_path:
@@ -123,9 +163,9 @@ def main():
                                 transforms=testing_transforms,
                                 multi_task=True if args.multi_task and base_folder_name in ss_datasetname else False,
                                 combine_class=False if not args.combine_class and get_dataset_category(set([base_folder_name]))==train_dataset_type else True, 
-                                r=args.segment_r,
-                                even_0_3=args.even_0_3,
-                                even_3_b=args.even_3_b,
+                                # r=args.segment_r,
+                                # even_0_3=args.even_0_3,
+                                # even_3_b=args.even_3_b,
                                 )
         testloader = data.DataLoader(testdataset, batch_size=1, shuffle=False)
         testloaders[base_folder_name] = testloader  # Store using the base folder name as the key
@@ -158,6 +198,10 @@ def eval_oem(testloaders, model, num_images_to_save, writer, logger, i_iter, arg
             ss_metric_op = ss_metric.PixelMetric(num_classes = dataset_num_classes[get_dataset_category(set([dataset_name]))])
         
         for index, batch in enumerate(tqdm(testloader)):
+            #! Batch might be none for no reason, so skip those
+            if batch is None:
+                print(f'batch[{index}] is none')
+                continue
             images = batch['image']
             ss_masks = batch.get('ss_mask', None)
 
@@ -214,6 +258,7 @@ def eval(testloaders, model, num_images_to_save, writer, logger, i_iter, args=No
     number_ss_data = 0
         
     for dataset_name, testloader in testloaders.items():
+        print(f"Testing on dataset: {dataset_name}")
         logger.info(f"Testing on dataset: {dataset_name}")
         average_meter = AverageMeter()
         vis_results = {'ori_img': [], 'tb_gt_dsms':[], 'tb_pre_dsms': [], 'tb_gt_ss_masks':[], 'tb_pre_ss_masks': []}
