@@ -265,6 +265,8 @@ class OEMDataSet(data.Dataset):
         self.list_path = [os.path.join(data, self.train_file if self.is_training else self.test_file) for data in self.root]
         
         self.datasetname = set([os.path.basename(i) for i in self.root])
+        #! checking
+        print(f'datasetname: {self.datasetname}')
         self.transforms = transforms
 
         self.ignore_label = ignore_label
@@ -277,12 +279,13 @@ class OEMDataSet(data.Dataset):
                 img_ids_in_dir = [line.strip() for line in file]
                 self.img_ids.extend(img_ids_in_dir)
                 #! The line below caused a issue because the train.txt is stored in the format xxx.tif
-                # self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}.tif"),
-                #                     'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}.tif"),
-                #                     'name': name} for name in img_ids_in_dir])
                 self.files.extend([{'img': os.path.join(root_dir, f"opt/{name}"),
                                     'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}"),
                                     'name': name} for name in img_ids_in_dir])
+                
+                # self.files.extend([{'img': os.path.join(root_dir, f"{(ds_name:=name.split('_')[0])}/images/{name}"),
+                #                     'ss_mask': os.path.join(root_dir, f"{ds_name}/labels/{name}"),
+                #                     'name': name} for name in img_ids_in_dir])
         random.shuffle(self.files)
         
         if max_iters is not None:
@@ -321,6 +324,8 @@ class OEMDataSet(data.Dataset):
             result_dict = {"image": image, "size": np.array(image.shape[:2]), "name": datafiles["name"]}
 
             dataset_category = get_dataset_category(self.datasetname)
+            #! checking
+            print(f'dataset_category: {dataset_category}')
             if dataset_category is not None:
                 relabel_rules = combination_relabel_rules if self.combine_class else normal_relabel_rules
                 ss_mask = np.array(Image.open(datafiles["ss_mask"]), dtype=np.uint8)
@@ -349,8 +354,9 @@ class OEMDataSet(data.Dataset):
 
             return result_dict
         
-        except IOError as e:
+        # except IOError as e:
+        except Exception as e:
             #! This threw an error for OEM dataset because 'dsm' is not a key
             # print(f"Error reading file {datafiles['img']} or {datafiles['dsm']}: {e}")
-            print(f"Error reading file {datafiles.get('img', 'img_file')} or {datafiles.get('dsm', 'dsm_file')}: {e}")
+            print(f"Error reading file {datafiles.get('img', 'img_file')} or {datafiles.get('ss_mask', 'dsm_file')}: {e}")
             return None

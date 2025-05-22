@@ -2,3 +2,6 @@ logs/
 snapshot*/
 __pycache__
 data
+*.out
+*.log
+*.pth

@@ -52,7 +52,17 @@ from albumentations.pytorch import ToTensorV2
 #     parser.add_argument("--snapshot_dir", type=str, default='snapshot', help="Where to save snapshots of the model.")
 
 #     return parser.parse_args()
-    
+
+
+#! This is a fix to the issue for missing image/mask files
+from torch.utils.data.dataloader import default_collate
+
+def custom_collate(batch):
+    try: 
+        return default_collate(batch)
+    except:
+        print(f'problem with a batch, skipping')
+        return None    
 
 def get_arguments():
     """Parse all the arguments provided from the CLI.
@@ -73,7 +83,7 @@ def get_arguments():
     parser.add_argument("--gpu", type=str, default='0', help="Specify GPU device to use.")
     
     # Dataset-related arguments
-    parser.add_argument("--root_dir", type=str, default='/mnt/data/SynRS3D/data', help="Root directory of the datasets.")
+    parser.add_argument("--root_dir", type=str, default='/mnt/synrs3d/SynRS3D/data', help="Root directory of the datasets.")
     parser.add_argument("--test_datasets", nargs='*', type=str, default=['DFC18'], help="List of test datasets.")
     parser.add_argument("--ood_datasets", nargs='*', type=str, default=['DFC18'], help="List of out-of-distribution datasets.")
     parser.add_argument("--images_file", nargs='*', type=str, default=['train.txt', 'test_syn.txt', 'test.txt'], help="Image files used for training and testing.")
@@ -142,17 +152,20 @@ def main():
     Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True),
     ToTensorV2()
     ])
+    
+    
    
     # ! supressed because won't have OEM dataset as structured
-    # oemloaders = {}
-    # oemdataset = OEMDataSet([os.path.join(args.root_dir,'OEM')], 
-    #                         is_training=False,
-    #                         images_file=args.images_file,
-    #                         transforms=testing_transforms,
-    #                         combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
-    #                         )
-    # oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False)
-    # oemloaders['OEM']=oemloader
+    #! Nope we needed this
+    oemloaders = {}
+    oemdataset = OEMDataSet([os.path.join(args.root_dir,'OEM')], 
+                            is_training=False,
+                            images_file=args.images_file,
+                            transforms=testing_transforms,
+                            combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
+                            )
+    oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False, collate_fn=custom_collate) #! modified
+    oemloaders['OEM']=oemloader
 
     testloaders = {}
     for d in test_data_path:
@@ -172,13 +185,14 @@ def main():
         
     if args.eval_oem:
         eval_oem(oemloaders, model, args.save_num_images, writer, logger, 0, args=args, train_dataset_type=train_dataset_type)
-        
-    eval(testloaders, model, args.save_num_images, writer, logger, 0, args=args,train_dataset_type=train_dataset_type)
+    else:
+        eval(testloaders, model, args.save_num_images, writer, logger, 0, args=args,train_dataset_type=train_dataset_type)
             
 def eval_oem(testloaders, model, num_images_to_save, writer, logger, i_iter, args=None, train_dataset_type=None):
     
     eval_combination_relabel_rules = {
     "OEM": {0: 0, 1: 0, 2: 0, 3: 0, 4: 1, 5: 0, 6: 0, 7: 2},
+    # "OEM": {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7}, 
     "DFC19": {0: 0, 1: 1, 2: 2, 3: 0, 4: 0},
     "ISPRS": {0: 0, 1: 2, 2: 0, 3: 1, 4: 0, 5: 0}
     }
@@ -191,6 +205,8 @@ def eval_oem(testloaders, model, num_images_to_save, writer, logger, i_iter, arg
         vis_results = {'ori_img': [], 'tb_gt_ss_masks':[], 'tb_pre_ss_masks': []}
         
         eval_combine_class = not (not args.combine_class and (get_dataset_category({dataset_name}) in [train_dataset_type, 'OEM']))
+        print(f'{eval_combine_class=}')
+        eval_combine_class = False
 
         if eval_combine_class:
             ss_metric_op = ss_metric.PixelMetric(num_classes = 3, logger=logger)
@@ -246,6 +262,7 @@ def eval(testloaders, model, num_images_to_save, writer, logger, i_iter, args=No
     
     eval_combination_relabel_rules = {
     "OEM": {0: 0, 1: 0, 2: 0, 3: 0, 4: 1, 5: 0, 6: 0, 7: 2},
+    # "OEM": {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7}, 
     "DFC19": {0: 0, 1: 1, 2: 2, 3: 0, 4: 0},
     "ISPRS": {0: 0, 1: 2, 2: 0, 3: 1, 4: 0, 5: 0}
     }

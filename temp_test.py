@@ -10,9 +10,6 @@ import json
 import numpy as np
 from evaluation import eval,eval_oem
 
-#! fix issue
-from evaluation import custom_collate
-
 from utils.utils import adjust_learning_rate
 
 from utils.datasets_config import (
@@ -96,9 +93,6 @@ def get_arguments():
     parser.add_argument("--fl_threshold", type=float, default=0.8, help="threshold, ϵ in formula [4]")
     parser.add_argument("--fl_weight", type=float, default=1., help="weight of feature constraint loss")
     parser.add_argument("--fl_decrement", type=float, default=0.05, help="This value determines how much the threshold decreases per layer")
-    
-    # stylization mix parameter
-    parser.add_argument("--stylized_p", type=float, default=0., help="probability of stylized version to mix in")
 
     return parser.parse_args()
     
@@ -241,10 +235,7 @@ def main():
                                 combine_class=args.combine_class,
                                 apply_da=args.apply_da,
                                 da_aug_paras=da_aug_paras,
-                                tgt_root_dir = tgt_data_path,
-                                
-                                #! stylization
-                                stylized_p = args.stylized_p
+                                tgt_root_dir = tgt_data_path
                                 )
     syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 
@@ -276,7 +267,7 @@ def main():
                                 transforms=testing_transforms,
                                 combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
                                 )
-        oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False, collate_fn=custom_collate)#! modified
+        oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False)
         oemloaders['OEM']=oemloader
 
     encoder_modules = set(model.pretrained.parameters())
@@ -310,8 +301,8 @@ def main():
         # training on source
         try:
             batch = next(iter(syn_trainloader))
-        except Exception as e:
-            logger.info(f"HEY! Skipped a batch here: {str(e)}")
+        except:
+            logger.info('HEY! Skipped a batch here')
             continue
         images, dsms = batch['image'], batch['dsm']
         ss_masks = batch.get('ss_mask') if args.multi_task else None

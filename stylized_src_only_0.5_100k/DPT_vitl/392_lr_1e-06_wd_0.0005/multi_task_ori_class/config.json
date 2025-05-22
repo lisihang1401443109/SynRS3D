@@ -1,0 +1,93 @@
+{
+    "root_dir": "/mnt/synrs3d/SynRS3D/data",
+    "datasets": [
+        "grid_g05_mid_v2",
+        "grid_g005_mid_v2",
+        "terrain_g05_low_v1",
+        "terrain_g005_low_v1",
+        "grid_g05_mid_v1",
+        "grid_g005_mid_v1",
+        "terrain_g05_mid_v1",
+        "terrain_g005_mid_v1",
+        "grid_g05_low_v1",
+        "grid_g005_low_v1",
+        "grid_g05_high_v1",
+        "grid_g005_high_v1",
+        "terrain_g05_high_v1",
+        "terrain_g005_high_v1",
+        "terrain_g1_low_v1",
+        "terrain_g1_mid_v1",
+        "terrain_g1_high_v1"
+    ],
+    "test_datasets": [
+        "DFC18",
+        "DFC19_JAX",
+        "DFC19_OMA",
+        "geonrw_rural",
+        "geonrw_urban",
+        "OGC_ARG",
+        "OGC_ATL"
+    ],
+    "ood_datasets": [
+        "DFC18",
+        "DFC19_JAX",
+        "DFC19_OMA",
+        "geonrw_rural",
+        "geonrw_urban",
+        "OGC_ARG",
+        "OGC_ATL"
+    ],
+    "images_file": [
+        "train.txt",
+        "test_syn.txt",
+        "train.txt"
+    ],
+    "crop_size": 392,
+    "decoder": "DPT",
+    "encoder": "vitl",
+    "multi_task": true,
+    "combine_class": false,
+    "apply_da": [
+        "HM",
+        "PDA"
+    ],
+    "FDA_beta": 0.05,
+    "HM_blend_ratio": [
+        0.8,
+        1
+    ],
+    "PDA_blend_ratio": [
+        0.8,
+        1
+    ],
+    "PDA_type": "standard",
+    "tgt_datasets": [
+        "DFC18"
+    ],
+    "max_da_images": 1200,
+    "batch_size": 1,
+    "learning_rate": 1e-06,
+    "decoder_lr_weight": 10.0,
+    "num_steps": 100000,
+    "start_iters": 0,
+    "power": 0.9,
+    "warmup_steps": 0,
+    "warmup_mode": "linear",
+    "decay_mode": "poly",
+    "weight_decay": 0.0005,
+    "gpu": "0",
+    "save_num_images": 0,
+    "save_pred_every": 1000,
+    "snapshot_dir": "/mnt/synrs3d/SynRS3D/stylized_src_only_0.5_100k",
+    "only_save_best": true,
+    "lambda_dsms": 1.0,
+    "eval_oem": true,
+    "pretrained": true,
+    "shuffle": true,
+    "feat_loss": false,
+    "fl_start": 3,
+    "fl_threshold": 0.8,
+    "fl_weight": 1.0,
+    "fl_decrement": 0.05,
+    "stylized_p": 0.5
+}
