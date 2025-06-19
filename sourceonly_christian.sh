@@ -12,14 +12,13 @@ python train_dpt_sourceonly.py \
 --crop_size 392 \
 --encoder vitl \
 --decoder DPT \
---snapshot_dir /mnt/synrs3d/SynRS3D/snapshot_src_only_train_christian_all_styled \
+--snapshot_dir /mnt/synrs3d/SynRS3D/snapshot_src_only_train_christian_styled_gsd1_rest_synthetic \
 --images_file ${images_file[*]} \
 --batch_size 1 \
 --learning_rate 1e-6 \
 --weight_decay 5e-4 \
 --warmup_steps 0 \
 --decay_mode poly \
---num_steps 40000 \
 --save_num_images 0 \
 --save_pred_every 500 \
 --multi_task \
