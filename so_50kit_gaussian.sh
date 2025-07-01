@@ -30,6 +30,6 @@ python train_dpt_sourceonly.py \
 --only_save_best \
 --decoder_lr_weight 10 \
 --lambda_dsms 1.0 \
---gaussian
+--gaussian_p 0.5
 #optional
 #--eval_oem

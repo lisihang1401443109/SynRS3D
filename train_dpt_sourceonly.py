@@ -101,7 +101,10 @@ def get_arguments():
     parser.add_argument("--stylized_p", type=float, default=0., help="probability of stylized version to mix in")
     
     # gaussian blur
-    parser.add_argument("--gaussian", action="store_true", help="whether to use gaussian blur augmentation")
+    parser.add_argument("--gaussian_p", type=float, default=0.0, 
+                       help="probability of applying gaussian blur (0.0 means no blur, 1.0 means always apply)")
+    parser.add_argument("--style_aug_p", type=float, default=0.0, 
+                       help="probability of applying style augmentation")
 
     return parser.parse_args()
     
@@ -215,18 +218,21 @@ def main():
                     'PDA': {'blend_ratio': args.PDA_blend_ratio, 'transform_type': args.PDA_type}}
     
 
-    traning_src_transforms = Compose([
+    transforms_list = [
     RandomCrop(args.crop_size, args.crop_size),
     OneOf([
         HorizontalFlip(True),
         VerticalFlip(True),
         RandomRotate90(True)
     ], p=0.75),
-    GaussianBlur(blur_limit=(3, 7), p=0.3) if args.gaussian else None,
-    Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True),
-    ToTensorV2()
-    ])
-
+    ]
+    if args.gaussian_p > 0:
+        transforms_list.append(GaussianBlur(blur_limit=(3, 7), p=args.gaussian_p))
+    transforms_list.append(Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True))
+    transforms_list.append(ToTensorV2())
+    
+    traning_src_transforms = Compose(transforms_list)
+        
     tgt_data_path = [os.path.join(args.root_dir, dataset) for dataset in args.tgt_datasets]
         
     # Filter out real dataset names from args.datasets for real_train_data_path
