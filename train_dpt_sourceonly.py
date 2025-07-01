@@ -29,7 +29,7 @@ from utils.criterion import SmoothL1Loss, CriterionCrossEntropy
 from models.dpt import DPT_DINOv2
 
 from torch.utils.tensorboard import SummaryWriter
-from albumentations import Compose, RandomCrop, HorizontalFlip, VerticalFlip, RandomRotate90, Normalize, OneOf, CenterCrop
+from albumentations import Compose, RandomCrop, HorizontalFlip, VerticalFlip, RandomRotate90, Normalize, OneOf, CenterCrop, GaussianBlur
 from albumentations.pytorch import ToTensorV2
                 
 def get_arguments():
@@ -99,6 +99,9 @@ def get_arguments():
     
     # stylization mix parameter
     parser.add_argument("--stylized_p", type=float, default=0., help="probability of stylized version to mix in")
+    
+    # gaussian blur
+    parser.add_argument("--gaussian", action="store_true", help="whether to use gaussian blur augmentation")
 
     return parser.parse_args()
     
@@ -219,6 +222,7 @@ def main():
         VerticalFlip(True),
         RandomRotate90(True)
     ], p=0.75),
+    GaussianBlur(blur_limit=(3, 7), p=0.3) if args.gaussian else None,
     Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True),
     ToTensorV2()
     ])
