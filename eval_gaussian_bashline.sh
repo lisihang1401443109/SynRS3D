@@ -11,10 +11,5 @@ python evaluation.py \
 --images_file train.txt test.txt test.txt \
 --snapshot_dir snapshot_so_gaussian_50k_eval \
 --root_dir /mnt/synrs3d/SynRS3D/data \
---batch_size 1 \
---crop_size 392 \
---encoder vitl \
---decoder DPT \
---multi_task
 
 # Note: OEM evaluation is not included as requested
