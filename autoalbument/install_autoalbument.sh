@@ -10,12 +10,12 @@ NC='\033[0m' # No Color
 
 echo -e "${YELLOW}Setting up AutoAlbument environment...${NC}"
 
-# Check if conda is installed
-if ! command -v conda &> /dev/null; then
-    echo -e "${YELLOW}Conda not found. Please install Miniconda or Anaconda first.${NC}"
-    echo "You can download it from: https://docs.conda.io/en/latest/miniconda.html"
-    exit 1
-fi
+# # Check if conda is installed
+# if ! command -v conda &> /dev/null; then
+#     echo -e "${YELLOW}Conda not found. Please install Miniconda or Anaconda first.${NC}"
+#     echo "You can download it from: https://docs.conda.io/en/latest/miniconda.html"
+#     exit 1
+# fi
 
 # Create conda environment
 ENV_NAME="autoalbument"
