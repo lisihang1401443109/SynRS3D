@@ -26,6 +26,8 @@ log "Log file: $LOG_FILE"
 # Run AutoAlbument search
 log "Running: autoalbument-search --config-dir $(pwd) --config-name search hydra.run.dir=$OUTPUT_DIR output_dir=$OUTPUT_DIR"
 
+conda activate autoalbument
+
 autoalbument-search \
     --config-dir "$(pwd)" \
     --config-name search \
