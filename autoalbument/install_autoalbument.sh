@@ -37,7 +37,7 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
 # Install AutoAlbument and dependencies
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
 pip install --upgrade pip
-pip install autoalbument==1.0.0
+pip install autoalbument
 pip install albumentations==1.3.0
 pip install hydra-core --upgrade
 pip install omegaconf
