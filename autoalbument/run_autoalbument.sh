@@ -2,6 +2,8 @@
 
 # Set up environment
 export PYTHONPATH=$PYTHONPATH:$(pwd)
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate autoalbument
 
 # Create output directory with timestamp
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
