@@ -2,7 +2,8 @@
 
 # Set up environment
 export PYTHONPATH=$PYTHONPATH:$(pwd)
-source ~/miniconda3/etc/profile.d/conda.sh
+# source ~/miniconda3/etc/profile.d/conda.sh
+source activate base
 conda activate autoalbument
 
 # Create output directory with timestamp
