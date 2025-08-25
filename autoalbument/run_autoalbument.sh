@@ -35,7 +35,7 @@ autoalbument-search \
     --config-dir "$(pwd)" \
     --config-name search \
     hydra.run.dir="$OUTPUT_DIR" \
-    output_dir="$OUTPUT_DIR" 2>&1 | tee -a "$LOG_FILE"
+    2>&1 | tee -a "$LOG_FILE"
 
 # Check if search was successful
 if [ ${PIPESTATUS[0]} -eq 0 ]; then
