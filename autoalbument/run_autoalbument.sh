@@ -32,10 +32,9 @@ log "Running: autoalbument-search --config-dir $(pwd) --config-name search hydra
 conda activate autoalbument
 
 autoalbument-search \
-    --config-dir "$(pwd)" \
+    --config-dir . \
     --config-name search \
-    hydra.run.dir="$OUTPUT_DIR" \
-    2>&1 | tee -a "$LOG_FILE"
+    hydra.run.dir="$OUTPUT_DIR"
 
 # Check if search was successful
 if [ ${PIPESTATUS[0]} -eq 0 ]; then
