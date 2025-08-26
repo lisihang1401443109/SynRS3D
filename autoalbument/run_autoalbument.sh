@@ -27,14 +27,12 @@ log "Output directory: $OUTPUT_DIR"
 log "Log file: $LOG_FILE"
 
 # Run AutoAlbument search
-log "Running: autoalbument-search --config-dir . --config-name search hydra.run.dir=$OUTPUT_DIR"
+log "Running: autoalbument-search --config-dir .
 
 conda activate autoalbument
 
 autoalbument-search \
-    --config-dir . \
-    --config-name search \
-    hydra.run.dir="$OUTPUT_DIR"
+    --config-dir . 
 
 # Check if search was successful
 if [ ${PIPESTATUS[0]} -eq 0 ]; then
