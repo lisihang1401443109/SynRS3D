@@ -27,7 +27,7 @@ log "Output directory: $OUTPUT_DIR"
 log "Log file: $LOG_FILE"
 
 # Run AutoAlbument search
-log "Running: autoalbument-search --config-dir $(pwd) --config-name search hydra.run.dir=$OUTPUT_DIR"
+log "Running: autoalbument-search --config-dir . --config-name search hydra.run.dir=$OUTPUT_DIR"
 
 conda activate autoalbument
 
