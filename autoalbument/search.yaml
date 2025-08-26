@@ -77,9 +77,12 @@ semantic_segmentation_model:
 
 data:
   dataset:
-    _target_: dataset.CityscapesSearchDataset
-    root: ~/data/cityscapes/data
-    split: train
+    _target_: dataset.AutoAlbumentDataset
+    root: ~/data/DFC19_JAX
+    image_dir: opt
+    mask_dir: gt_ss_mask
+    split_file: train.txt
+    num_classes: 5
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
   # the `instantiate` method from Hydra - https://hydra.cc/docs/next/patterns/instantiate_objects/overview/.
   #
