@@ -1,0 +1,72 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sihang-style-sourceonly-100k-job-0.5
+  namespace: gp-engine-malof
+  labels:
+    job-name: sihang-style-sourceonly-100k-job-0.5
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 0
+  selector:
+    matchLabels:
+      batch.kubernetes.io/controller-uid: 2b8e991c-9019-4676-879c-daac328754e0
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        batch.kubernetes.io/controller-uid: 2b8e991c-9019-4676-879c-daac328754e0
+        batch.kubernetes.io/job-name: sihang-style-sourceonly-100k-job-0.5
+        controller-uid: 2b8e991c-9019-4676-879c-daac328754e0
+        job-name: sihang-style-sourceonly-100k-job-0.5
+    spec:
+      volumes:
+        - name: pvc-storage
+          persistentVolumeClaim:
+            claimName: synrs3d-test
+        - name: chuqiao-result
+          persistentVolumeClaim:
+            claimName: chuqiao-result-pvc
+      containers:
+        - name: pvc-test-container
+          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python
+          command:
+            - /bin/bash
+            - '-c'
+          args:
+            - |
+              #!/bin/bash
+              source activate base;
+              conda activate /mnt/synrs3d/conda_env/synrs3d_1;
+              which python;
+              cd /mnt/synrs3d/SynRS3D;
+              bash ./data/make_links.sh
+              bash /mnt/synrs3d/SynRS3D/so_style_100kit.sh 0.5
+          resources:
+            limits:
+              cpu: '12'
+              memory: 32Gi
+              nvidia.com/gpu: '1'
+            requests:
+              cpu: '8'
+              memory: 16Gi
+              nvidia.com/gpu: '1'
+          volumeMounts:
+            - name: pvc-storage
+              mountPath: /mnt/synrs3d
+            - name: chuqiao-result
+              mountPath: /mnt/chuqiao_result
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 0
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  ttlSecondsAfterFinished: 86400
+  completionMode: NonIndexed
+  suspend: false
