@@ -33,7 +33,8 @@ conda activate $ENV_NAME
 
 # Install AutoAlbument and dependencies
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
-pip install --upgrade pip
+# pip install --upgrade pip
+python -m pip install --upgrade pip==1.24
 pip install -U autoalbument
 
 
