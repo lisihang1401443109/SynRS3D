@@ -78,7 +78,7 @@ semantic_segmentation_model:
 data:
   dataset:
     _target_: dataset.AutoAlbumentDataset
-    root: ~/data/DFC19_JAX
+    root: /mnt/synrs3d/SynRS3D/data/DFC19_JAX
     image_dir: opt
     mask_dir: gt_ss_mask
     split_file: train.txt
