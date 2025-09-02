@@ -38,11 +38,13 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
 pip install --upgrade pip
 pip install -U autoalbument
-# pip install albumentations==1.3.0
-# pip install hydra-core --upgrade
-# pip install omegaconf
-# pip install opencv-python-headless
-# pip install tqdm
+
+
+# Install specific versions of required packages
+echo -e "\n${GREEN}Installing required packages with specific versions...${NC}"
+pip install timm==0.3.2
+pip install segmentation-models-pytorch==0.1.3
+pip install hydra-core==1.0.6
 
 # Install development tools (optional)
 echo -e "\n${GREEN}Installing development tools...${NC}"
