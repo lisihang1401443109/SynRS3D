@@ -27,16 +27,39 @@ spec:
               # Activate base environment
               source activate base
 
+          
+
+              # Install GDAL
+              # conda install gdal -y
+
+              # Check Python path
+              # which python
+
+
+              # Install Python packages
+              # python -m pip install albumentations==2.0.5 tqdm ever-beta==0.2.3 huggingface_hub rasterio
+              # python -m pip install scikit-learn
+
               # echo "albumentations installed"
 
+              # Replace the albumentations transform file
+              # rm /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py
+              # cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
 
               # Navigate to SynRS3D directory
               cd /mnt/synrs3d/SynRS3D
 
               git checkout gaussaian-baselines
-              git pull
+              git pull --rebase
+              # git fetch --all
               git reset --hard origin/gaussian-baselines 
 
+              # Optional scripts to run
+              # bash ./data/make_links.sh
+              # bash /mnt/synrs3d/SynRS3D/so_style_100kit.sh 0.5
+              # bash /mnt/synrs3d/SynRS3D/sourceonly_100kit.sh 0.5
+
+              # Run evaluation script
               cd autoalbument
               bash install_autoalbument.sh
               conda activate autoalbument
