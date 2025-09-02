@@ -30,9 +30,6 @@ echo -e "\n${GREEN}Activating environment...${NC}"
 eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
 
-# Install PyTorch with CUDA support
-echo -e "\n${GREEN}Installing PyTorch with CUDA support...${NC}"
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia -y
 
 # Install AutoAlbument and dependencies
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
