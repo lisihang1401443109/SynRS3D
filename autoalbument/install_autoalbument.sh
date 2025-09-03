@@ -34,7 +34,7 @@ conda activate $ENV_NAME
 # Install AutoAlbument and dependencies
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
 # pip install --upgrade pip
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip==23
 pip install -U autoalbument
 
 
@@ -43,10 +43,8 @@ echo -e "\n${GREEN}Installing required packages with specific versions...${NC}"
 pip install timm==0.3.2
 pip install segmentation-models-pytorch==0.1.3
 pip install hydra-core==1.0.6
+pip install PyYAML==5.3.1
 
-# Install development tools (optional)
-echo -e "\n${GREEN}Installing development tools...${NC}"
-pip install black isort flake8 jupyter
 
 # Verify installation
 echo -e "\n${GREEN}Verifying installation...${NC}"
