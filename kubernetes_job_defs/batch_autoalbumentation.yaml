@@ -48,12 +48,12 @@ spec:
           resources:
             limits:
               cpu: '32'
-              memory: 32Gi
-              nvidia.com/gpu: '1'
+              memory: 128Gi
+              nvidia.com/gpu: '2'
             requests:
               cpu: '16'
-              memory: 16Gi
-              nvidia.com/gpu: '1'
+              memory: 64Gi
+              nvidia.com/gpu: '2'
           volumeMounts:
             - name: pvc-storage
               mountPath: /mnt/synrs3d

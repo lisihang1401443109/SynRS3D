@@ -23,7 +23,7 @@ policy_model:
   # `temperature` Relaxed Bernoulli distribution behaves like Bernoulli distribution. In the paper, the authors
   # of Faster AutoAugment used 0.05 as a default value for `temperature`.
 
-  num_sub_policies: 25
+  num_sub_policies: 10
   # Number of augmentation sub-policies. When an image passes through an augmentation pipeline, Faster AutoAugment
   # randomly chooses one sub-policy and uses augmentations from that sub-policy to transform an input image. A larger
   # number of sub-policies leads to a more diverse set of augmentations and better performance of a model trained on
@@ -54,7 +54,7 @@ semantic_segmentation_model:
   # a semantic segmentation model.
   # This model takes four parameters: `num_classes`, `architecture`, `encoder_architecture` and `pretrained`.
 
-  num_classes: 5
+  num_classes: 8
   # The number of classes in the dataset. The dataset implementation should return a mask as a NumPy array with
   # the shape [height, width, num_classes]. In a case of binary segmentation you can set `num_classes` to 1.
 
@@ -78,10 +78,10 @@ semantic_segmentation_model:
 data:
   dataset:
     _target_: dataset.AutoAlbumentDataset
-    root: /mnt/synrs3d/SynRS3D/data/DFC19_JAX
+    root: /mnt/synrs3d/SynRS3D/data/grid_g005_mid_v1
     image_dir: opt
     mask_dir: gt_ss_mask
-    split_file: train.txt
+    split_file: subset_train.txt
     num_classes: 5
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
   # the `instantiate` method from Hydra - https://hydra.cc/docs/next/patterns/instantiate_objects/overview/.
