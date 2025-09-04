@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Set up environment
-export PYTHONPATH=$PYTHONPATH:$(pwd)
+
 # source ~/miniconda3/etc/profile.d/conda.sh
 source activate base
 conda activate autoalbument
@@ -27,32 +26,9 @@ log "Output directory: $OUTPUT_DIR"
 log "Log file: $LOG_FILE"
 
 # Run AutoAlbument search
-log "Running: autoalbument-search --config-dir .
+log "Running: autoalbument-search --config-dir /mnt/synrs3d/SynRS3D/autoalbument"
 
 conda activate autoalbument
 
 autoalbument-search \
-    --config-dir . 
-
-# Check if search was successful
-if [ ${PIPESTATUS[0]} -eq 0 ]; then
-    log "AutoAlbument search completed successfully!"
-    
-    # Check for best policy
-    BEST_POLICY="$OUTPUT_DIR/policy/best_policy.json"
-    if [ -f "$BEST_POLICY" ]; then
-        log "Best policy saved to: $BEST_POLICY"
-        log "To use this policy in training, set policy_dir to: $(dirname "$BEST_POLICY")"
-        
-        # Create a symlink to the latest results
-        LATEST_LINK="outputs/latest"
-        rm -f "$LATEST_LINK"
-        ln -s "$(basename "$OUTPUT_DIR")" "$LATEST_LINK"
-        log "Created symlink: $LATEST_LINK -> $(basename "$OUTPUT_DIR")"
-    else
-        log "Warning: Best policy not found in expected location: $BEST_POLICY"
-    fi
-else
-    log "AutoAlbument search failed. Check the logs in: $LOG_FILE"
-    exit 1
-fi
+    --config-dir /mnt/synrs3d/SynRS3D/autoalbument
