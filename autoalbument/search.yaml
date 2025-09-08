@@ -54,7 +54,7 @@ semantic_segmentation_model:
   # a semantic segmentation model.
   # This model takes four parameters: `num_classes`, `architecture`, `encoder_architecture` and `pretrained`.
 
-  num_classes: 8
+  num_classes: 5
   # The number of classes in the dataset. The dataset implementation should return a mask as a NumPy array with
   # the shape [height, width, num_classes]. In a case of binary segmentation you can set `num_classes` to 1.
 
@@ -149,7 +149,7 @@ data:
 
   dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: 4
+    batch_size: 8
     shuffle: true
     num_workers: 0
     pin_memory: true
