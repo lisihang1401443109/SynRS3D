@@ -36,7 +36,6 @@ spec:
               cd /mnt/synrs3d/SynRS3D
 
               git checkout gaussian-baselines
-              git checkout gaussian-baselines
               git pull
               git reset --hard origin/gaussian-baselines 
 
