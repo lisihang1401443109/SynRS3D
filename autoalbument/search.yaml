@@ -149,7 +149,7 @@ data:
 
   dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: 1
+    batch_size: 4
     shuffle: true
     num_workers: 0
     pin_memory: true
