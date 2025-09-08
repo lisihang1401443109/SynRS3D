@@ -17,8 +17,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: pvc-test-container
-          image: ghcr.io/albumentations-team/autoalbument:latest
-          # image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+          # image: ghcr.io/albumentations-team/autoalbument:latest
+          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
           imagePullPolicy: Always
           command:
             - /bin/bash
@@ -36,6 +36,7 @@ spec:
               cd /mnt/synrs3d/SynRS3D
 
               git checkout gaussian-baselines
+              git checkout gaussian-baselines
               git pull
               git reset --hard origin/gaussian-baselines 
 
@@ -48,12 +49,12 @@ spec:
           resources:
             limits:
               cpu: '32'
-              memory: 128Gi
-              nvidia.com/a100: '1'
+              memory: 64Gi
+              nvidia.com/gpu: '1'
             requests:
               cpu: '16'
               memory: 64Gi
-              nvidia.com/a100: '1'
+              nvidia.com/gpu: '1'
           volumeMounts:
             - name: pvc-storage
               mountPath: /mnt/synrs3d
