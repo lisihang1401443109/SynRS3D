@@ -30,7 +30,7 @@ spec:
 
   
               # install git
-              apt update && apt install git -y
+              # apt update && apt install git -y
               
               # Navigate to SynRS3D directory
               cd /mnt/synrs3d/SynRS3D
@@ -41,6 +41,7 @@ spec:
 
               cd autoalbument
               bash install_autoalbument.sh
+              export HYDRA_FULL_ERROR=1
               conda activate autoalbument
               bash run_autoalbument.sh
               
