@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-50k-job
+  name: sihang-autoalbument-50k-job-20250909
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-50k-job
+    job-name: sihang-autoalbument-50k-job-20250909
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-50k-job
+        job-name: sihang-autoalbument-50k-job-20250909
     spec:
       restartPolicy: Never
       containers:
@@ -61,7 +61,7 @@ spec:
               git pull
 
               # Make the script executable and run it
-              chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
+              # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               
               # Optional: Run evaluation after training completes
@@ -71,11 +71,11 @@ spec:
           resources:
             limits:
               cpu: '32'
-              memory: 64Gi  # Increased memory for AutoAlbument
+              memory: 32Gi  
               nvidia.com/gpu: '1'
             requests:
               cpu: '16'
-              memory: 32Gi
+              memory: 16Gi
               nvidia.com/gpu: '1'
           volumeMounts:
             - name: pvc-storage
