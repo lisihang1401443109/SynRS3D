@@ -70,6 +70,12 @@ def get_arguments():
                         default='/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json',
                         help="Path to the AutoAlbument policy JSON file.")
     
+    # Additional arguments from the training script
+    parser.add_argument("--pretrained", action="store_true",
+                        help="Use pretrained weights for the model.")
+    parser.add_argument("--decoder_lr_weight", type=float, default=10.0,
+                        help="Learning rate weight for the decoder.")
+    
     return parser.parse_args()
 
 def get_autoalbument_transforms(policy_path, crop_size=392):
@@ -87,7 +93,7 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
     
     # Create a list of transforms starting with the policy
     transforms = [
-        RandomCrop(crop_size, crop_size, always_apply=True),
+        A.RandomCrop(crop_size, crop_size, always_apply=True),
         policy,
         A.Normalize(
             mean=(123.675, 116.28, 103.53), 
@@ -137,7 +143,7 @@ def main():
     model = DPT_DINOv2(
         encoder=args.encoder, 
         head_configs=head_configs, 
-        pretrained=True  # Assuming we want to use pretrained weights
+        pretrained=args.pretrained  # Use pretrained weights if specified
     ).to(device)
     
     # Setup data loaders with AutoAlbument transforms
@@ -199,7 +205,7 @@ def main():
         [
             {'params': model.pretrained.parameters(), 'lr': args.learning_rate},
             {'params': [p for n, p in model.named_parameters() 
-                       if 'pretrained' not in n], 'lr': args.learning_rate * 10}
+                       if 'pretrained' not in n], 'lr': args.learning_rate * args.decoder_lr_weight}
         ],
         weight_decay=args.weight_decay
     )
