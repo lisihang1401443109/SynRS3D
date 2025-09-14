@@ -11,16 +11,16 @@ spec:
     # image: ghcr.io/albumentations-team/autoalbument:latest
     image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
     command: ["sleep", "infinity"]
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     resources:
       limits:
         cpu: '16'
         memory: 32Gi
-        nvidia.com/a40: '1'
+        # nvidia.com/a40: '1'
       requests:
         cpu: '8'
         memory: 32Gi
-        nvidia.com/a40: '1'
+        # nvidia.com/a40: '1'
     volumeMounts:
       - name: pvc-storage
         mountPath: /mnt/synrs3d

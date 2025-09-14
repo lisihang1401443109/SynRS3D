@@ -31,51 +31,80 @@ def get_arguments():
     """
     parser = argparse.ArgumentParser(description="RS3DAda with AutoAlbument")
 
-    # Existing arguments from train_dpt_sourceonly.py
     parser.add_argument("--root_dir", type=str, default='/home/songjian/project/SynRS3D/data/', 
-                        help="Path to the directory containing the datasets.")
+                       help="Path to the directory containing the datasets.")
     parser.add_argument("--datasets", nargs='*', type=str, default=['grid_g05_mid_v1'], 
-                        help="training datasets name list")
+                       help="training datasets name list")
     parser.add_argument("--test_datasets", nargs='*', type=str, default=['DFC18'], 
-                        help="target domain 1 datasets list and target domain 2 datasets list")
+                       help="target domain 1 datasets list and target domain 2 datasets list")
+    parser.add_argument("--ood_datasets", nargs='*', type=str, default=['DFC18'], 
+                       help="target domain 2 datasets list")
+    parser.add_argument("--images_file", nargs='*', type=str, default=['train.txt', 'test.txt', 'train.txt'], 
+                       help="images txt file, first one is the training txt, second is the test txt, third is the style transfer txt")
     parser.add_argument("--crop_size", type=int, default=392, 
-                        help="height and width of images.")
+                       help="height and width of images.")
     parser.add_argument('--decoder', type=str, default='DPT',
-                        help='decoder')
+                       help='decoder')
     parser.add_argument('--encoder', type=str, default='vitl',
-                        help='encoder')
+                       help='encoder')
     parser.add_argument("--multi_task", action="store_true", 
-                        help="Whether to add segmentation branch.")
+                       help="Whether to add segmentation branch.")
     parser.add_argument("--combine_class", action="store_true", 
-                        help="Whether to combine 8 classes to 3.")
+                       help="Whether to combine 8 classes to 3.")
     parser.add_argument("--batch_size", type=int, default=2, 
-                        help="batchsize")
+                       help="batchsize")
     parser.add_argument("--learning_rate", type=float, default=1e-6, 
-                        help="Base learning rate for training with polynomial decay.")
+                       help="Base learning rate for training with polynomial decay.")
+    parser.add_argument("--decoder_lr_weight", type=float, default=10, 
+                       help="weight of decoder lr, default are 10 times of encoder's lr")
     parser.add_argument("--num_steps", type=int, default=40000, 
-                        help="Number of training steps.")
+                       help="Number of training steps.")
     parser.add_argument("--start_iters", type=int, default=0, 
-                        help="start_iters")
+                       help="start_iters")
+    parser.add_argument("--power", type=float, default=0.9, 
+                       help="Decay parameter to compute the learning rate.")
+    parser.add_argument("--warmup_steps", type=int, default=1500, 
+                       help="Number of warm-up steps.")
+    parser.add_argument("--warmup_mode", type=str, default='linear', 
+                       help="warm-up mode")
+    parser.add_argument("--decay_mode", type=str, default='poly', 
+                       help="decay mode")
     parser.add_argument("--weight_decay", type=float, default=5e-4, 
-                        help="Regularisation parameter for L2-loss.")
+                       help="Regularisation parameter for L2-loss.")
     parser.add_argument("--gpu", type=str, default='0', 
-                        help="choose gpu device.")
+                       help="choose gpu device.")
+    parser.add_argument("--save_num_images", type=int, default=5, 
+                       help="How many images to save.")
     parser.add_argument("--save_pred_every", type=int, default=500, 
-                        help="Save summaries and checkpoint every often.")
+                       help="Save summaries and checkpoint every often.")
     parser.add_argument("--snapshot_dir", type=str, default='snapshot_autoalbument', 
-                        help="Where to save snapshots of the model.")
+                       help="Where to save snapshots of the model.")
+    parser.add_argument("--only_save_best", action="store_true", 
+                       help="only save best checkpoint")
+    parser.add_argument("--lambda_dsms", type=float, default=0.8, 
+                       help="weight of height estimation loss")
+    parser.add_argument("--eval_oem", action="store_true", 
+                       help="evaluation on OEM dataset or not")
+    parser.add_argument("--pretrained", action="store_true", 
+                       help="use pretrained DINOv2 or not.")
+    parser.add_argument("--shuffle", action="store_true", 
+                       help="shuffle or not")
+    parser.add_argument("--feat_loss", action="store_true", 
+                       help="use feature constraint loss or not")
+    parser.add_argument("--fl_start", type=int, default=3, 
+                       help="calculate feature loss from which layer")
+    parser.add_argument("--fl_threshold", type=float, default=0.8, 
+                       help="threshold, ϵ in formula [4]")
+    parser.add_argument("--fl_weight", type=float, default=1., 
+                       help="weight of feature constraint loss")
+    parser.add_argument("--fl_decrement", type=float, default=0.05, 
+                       help="This value determines how much the threshold decreases per layer")
     
     # AutoAlbument specific arguments
     parser.add_argument("--policy_path", type=str, 
-                        default='/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json',
-                        help="Path to the AutoAlbument policy JSON file.")
-    
-    # Additional arguments from the training script
-    parser.add_argument("--pretrained", action="store_true",
-                        help="Use pretrained weights for the model.")
-    parser.add_argument("--decoder_lr_weight", type=float, default=10.0,
-                        help="Learning rate weight for the decoder.")
-    
+                       default='/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json',
+                       help="Path to the AutoAlbument policy JSON file.")
+
     return parser.parse_args()
 
 def get_autoalbument_transforms(policy_path, crop_size=392):
@@ -89,16 +118,16 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
         A composed Albumentations transform
     """
     # Load the AutoAlbument policy
-    policy = A.load(policy_path)
+    policy = A.load(policy_path, data_format='json')
     
-    # Create a list of transforms starting with the policy
+    # Create a list of transforms
     transforms = [
         A.RandomCrop(crop_size, crop_size, always_apply=True),
         policy,
         A.Normalize(
             mean=(123.675, 116.28, 103.53), 
             std=(58.395, 57.12, 57.375), 
-            max_pixel_value=1.0, 
+            max_pixel_value=255.0,
             always_apply=True
         ),
         ToTensorV2()
@@ -175,7 +204,7 @@ def main():
         A.Normalize(
             mean=(123.675, 116.28, 103.53),
             std=(58.395, 57.12, 57.375),
-            max_pixel_value=1.0,
+            max_pixel_value=255.0,
             always_apply=True
         ),
         ToTensorV2()

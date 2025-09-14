@@ -1,0 +1,66 @@
+{
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "RandomCrop",
+                "always_apply": true,
+                "p": 1.0,
+                "height": 392,
+                "width": 392
+            },
+            {
+                "__class_fullname__": "HorizontalFlip",
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "VerticalFlip",
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "RandomRotate90",
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "ShiftScaleRotate",
+                "shift_limit": 0.1,
+                "scale_limit": 0.1,
+                "rotate_limit": 30,
+                "p": 0.5,
+                "border_mode": 0,
+                "value": 0,
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "RandomBrightnessContrast",
+                "brightness_limit": 0.2,
+                "contrast_limit": 0.2,
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "HueSaturationValue",
+                "hue_shift_limit": 20,
+                "sat_shift_limit": 30,
+                "val_shift_limit": 20,
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "GaussianBlur",
+                "blur_limit": 3,
+                "p": 0.5
+            },
+            {
+                "__class_fullname__": "Normalize",
+                "mean": [123.675, 116.28, 103.53],
+                "std": [58.395, 57.12, 57.375],
+                "max_pixel_value": 255.0,
+                "always_apply": true
+            },
+            {
+                "__class_fullname__": "ToTensorV2",
+                "always_apply": true
+            }
+        ]
+    }
+}
