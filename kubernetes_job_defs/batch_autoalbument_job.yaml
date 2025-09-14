@@ -57,7 +57,7 @@ spec:
 
               # Make sure we have the latest code
               git fetch --all
-              git checkout main  # or the appropriate branch
+              git checkout gaussian-baselines
               git pull
 
               # Make the script executable and run it
