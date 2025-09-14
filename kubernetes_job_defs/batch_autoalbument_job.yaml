@@ -56,7 +56,7 @@ spec:
               cd /mnt/synrs3d/SynRS3D
 
               # Make sure we have the latest code
-              git fetch --all
+              # git fetch --all
               git checkout gaussian-baselines
               git pull
 

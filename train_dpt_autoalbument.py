@@ -21,7 +21,6 @@ from utils.criterion import SmoothL1Loss, CriterionCrossEntropy
 from models.dpt import DPT_DINOv2
 from torch.utils.tensorboard import SummaryWriter
 import albumentations as A
-from albumentations.plicy_interface import PolicyInducedAugmentation
 from albumentations.pytorch import ToTensorV2
 
 def get_arguments():
