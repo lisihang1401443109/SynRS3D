@@ -70,17 +70,17 @@ spec:
               
           resources:
             limits:
-              cpu: '32'
+              cpu: '16'
               memory: 32Gi  
               nvidia.com/gpu: '1'
             requests:
-              cpu: '16'
+              cpu: '8'
               memory: 16Gi
               nvidia.com/gpu: '1'
           volumeMounts:
             - name: pvc-storage
               mountPath: /mnt/synrs3d
-            - name: chuqiao-result
+            - name: chuqiao-result-pvc
               mountPath: /mnt/styled
           securityContext:
               runAsUser: 0
@@ -88,6 +88,6 @@ spec:
         - name: pvc-storage
           persistentVolumeClaim:
             claimName: synrs3d-test
-        - name: chuqiao-result
+        - name: chuqiao-result-pvc
           persistentVolumeClaim:
-            claimName: chuqiao-result
+            claimName: chuqiao-result-pvc
