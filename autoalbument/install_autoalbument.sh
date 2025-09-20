@@ -41,8 +41,8 @@ pip install -U autoalbument
 # Install specific versions of required packages
 echo -e "\n${GREEN}Installing required packages with specific versions...${NC}"
 pip install six
-# pip install torch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 
-pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
+# pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
 pip install timm==0.3.2
 pip install segmentation-models-pytorch==0.1.3
 pip install hydra-core==1.0.6
