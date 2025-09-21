@@ -26,7 +26,7 @@ python train_dpt_autoalbument.py \
 --pretrained \
 --combine_class \
 --decoder_lr_weight 10 \
---gpu 0,1  # Adjust based on available GPUs
+--gpu 0  # Adjust based on available GPUs
 
 # Optional: Uncomment to evaluate on OEM dataset
 # --eval_oem
