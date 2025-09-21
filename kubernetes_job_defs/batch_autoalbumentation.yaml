@@ -18,7 +18,7 @@ spec:
       containers:
         - name: pvc-test-container
           # image: ghcr.io/albumentations-team/autoalbument:latest
-          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-11.1
           imagePullPolicy: Always
           command:
             - /bin/bash
@@ -34,6 +34,7 @@ spec:
               
               # Navigate to SynRS3D directory
               cd /mnt/synrs3d/SynRS3D
+              nvidia-smi
 
               git checkout gaussian-baselines
               git pull

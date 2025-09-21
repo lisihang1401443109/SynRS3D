@@ -25,6 +25,11 @@ ENV_NAME="autoalbument"
 echo -e "\n${GREEN}Creating conda environment '${ENV_NAME}'...${NC}"
 conda create -n $ENV_NAME python=3.8 -y
 
+# Install CUDA version
+conda install -c nvidia -y cudatoolkit=11.1
+export CUDA_HOME=$CONDA_PREFIX
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+
 # Activate the environment
 echo -e "\n${GREEN}Activating environment...${NC}"
 eval "$(conda shell.bash hook)"
@@ -41,8 +46,8 @@ pip install -U autoalbument
 # Install specific versions of required packages
 echo -e "\n${GREEN}Installing required packages with specific versions...${NC}"
 pip install six
-pip install torch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
-# pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
+# pip install torch==1.8.0 torchvision==0.9.0 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 torchaudio==0.8.0 -f https://download.pytorch.org/whl/torch_stable.html
 pip install timm==0.3.2
 pip install segmentation-models-pytorch==0.1.3
 pip install hydra-core==1.0.6
