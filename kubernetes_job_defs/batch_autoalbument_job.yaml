@@ -44,7 +44,7 @@ spec:
               python -m pip install scikit-learn
               
               # Install AutoAlbument
-              pip install autoalbument
+              pip install autoalbument==1.4
 
               echo "Dependencies installed"
 
