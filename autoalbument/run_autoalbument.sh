@@ -10,6 +10,8 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 OUTPUT_DIR="outputs/$TIMESTAMP"
 LOG_FILE="$OUTPUT_DIR/search_$TIMESTAMP.log"
 
+export CUBLAS_WORKSPACE_CONFIG=:0:0
+
 # Create output directory
 mkdir -p "$OUTPUT_DIR"
 
