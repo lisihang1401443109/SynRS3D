@@ -25,16 +25,16 @@ ENV_NAME="autoalbument"
 echo -e "\n${GREEN}Creating conda environment '${ENV_NAME}'...${NC}"
 conda create -n $ENV_NAME python=3.8 -y
 
-# Install CUDA version
-conda install -c nvidia -y cudatoolkit=11.1
-export CUDA_HOME=$CONDA_PREFIX
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Activate the environment
 echo -e "\n${GREEN}Activating environment...${NC}"
 eval "$(conda shell.bash hook)"
 conda activate $ENV_NAME
 
+# Install CUDA version
+conda install -c nvidia -y cudatoolkit=11.1
+export CUDA_HOME=$CONDA_PREFIX
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Install AutoAlbument and dependencies
 echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
