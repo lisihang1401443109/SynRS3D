@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-50k-job-20250909
+  name: sihang-autoalbument-train-50k-job
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-50k-job-20250909
+    job-name: sihang-autoalbument-train-50k-job
 spec:
   parallelism: 1
   completions: 1
@@ -12,8 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-50k-job-20250909
-    spec:
+        job-name: sihang-autoalbument-train-50k-job
       restartPolicy: Never
       containers:
         - name: autoalbument-container

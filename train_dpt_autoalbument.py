@@ -183,7 +183,7 @@ def main():
     train_dataset = MultiTaskDataSet(
         train_data_path,
         is_training=True,
-        images_file=['train.txt'],
+        images_file=args.images_file,
         transforms=train_transforms,
         max_iters=args.num_steps * args.batch_size,
         multi_task=args.multi_task,
@@ -215,7 +215,7 @@ def main():
         val_dataset = MultiTaskDataSet(
             [os.path.join(args.root_dir, dataset_name)],
             is_training=False,
-            images_file=['test.txt'],
+            images_file=args.images_file,
             transforms=val_transforms,
             multi_task=args.multi_task,
             combine_class=args.combine_class
