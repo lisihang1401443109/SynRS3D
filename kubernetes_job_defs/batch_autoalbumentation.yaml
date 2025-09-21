@@ -17,8 +17,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: pvc-test-container
-          # image: ghcr.io/albumentations-team/autoalbument:latest
-          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+          image: ghcr.io/albumentations-team/autoalbument:latest
+          # image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
           imagePullPolicy: Always
           command:
             - /bin/bash
@@ -30,7 +30,7 @@ spec:
 
   
               # install git
-              # apt update && apt install git -y
+              apt update && apt install git -y
               
               # Navigate to SynRS3D directory
               cd /mnt/synrs3d/SynRS3D
