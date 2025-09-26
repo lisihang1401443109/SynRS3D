@@ -149,11 +149,22 @@ class MultiTaskDataSet(data.Dataset):
             if self.transforms:
                 masks_to_transform = [result_dict.get("dsm"), result_dict.get("ss_mask", None)]
                 ready_mask = [np.copy(mask) for mask in masks_to_transform if mask is not None]
+                # make sure mask is numpy array
+                for mask in ready_mask:
+                    if isinstance(mask, torch.Tensor):
+                        mask = mask.numpy()
                 #for mask in ready_mask:
                     # print('------masks strides: ', mask.strides)
                 # check the type of image
                 print('------image type: ', type(image))
-                augmented = self.transforms(image=image.cpu().numpy() if isinstance(image, torch.Tensor) else image, masks=ready_mask)
+                if isinstance(image, np.ndarray):
+                    pass
+                elif isinstance(image, torch.Tensor):
+                    image = image.numpy()
+                else:
+                    raise TypeError('Unsupported image type: ', type(image))
+                
+                augmented = self.transforms(image=image, masks=ready_mask)
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
