@@ -157,6 +157,9 @@ class MultiTaskDataSet(data.Dataset):
                     # print('------masks strides: ', mask.strides)
                 # check the type of image
                 print('------image type: ', type(image))
+                # mask type check
+                for mask in ready_mask:
+                    print('------mask type: ', type(mask))
                 if isinstance(image, np.ndarray):
                     pass
                 elif isinstance(image, torch.Tensor):
