@@ -150,7 +150,7 @@ class MultiTaskDataSet(data.Dataset):
                 ready_mask = [np.copy(mask) for mask in masks_to_transform if mask is not None]
                 #for mask in ready_mask:
                     # print('------masks strides: ', mask.strides)
-                augmented = self.transforms(image=image, masks=ready_mask)
+                augmented = self.transforms(image=image.numpy() if isinstance(image, torch.Tensor) else image, masks=ready_mask)
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
