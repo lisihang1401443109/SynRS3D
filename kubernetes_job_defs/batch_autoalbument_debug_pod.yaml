@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sihang-autoalbument-50k-debug-pod
+  namespace: gp-engine-malof
+  labels:
+    app: sihang-autoalbument-50k-debug
+spec:
+  containers:
+  - name: autoalbument-debug
+    image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+    command: ["/bin/bash", "-c", "--"]
+    args:
+      - |
+        # Set up environment
+        source activate base
+        
+        # Create and activate conda environment
+        conda create -n synrs3d python=3.11 -y
+        source activate synrs3d
+        
+        # Install PyTorch with CUDA support
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+        
+        # Install other dependencies
+        conda install gdal -y
+        python -m pip install albumentations==2.0.5 tqdm ever-beta==0.2.3 huggingface_hub rasterio
+        python -m pip install scikit-learn
+        pip install autoalbument==1.4
+        
+        echo "Environment setup complete. The pod will now sleep indefinitely for debugging."
+        echo "You can exec into the pod and run commands manually."
+        
+        # Keep the container running
+        tail -f /dev/null
+    resources:
+      limits:
+        cpu: '16'
+        memory: 32Gi
+        nvidia.com/gpu: '1'
+      requests:
+        cpu: '8'
+        memory: 16Gi
+        nvidia.com/gpu: '1'
+    volumeMounts:
+      - name: pvc-storage
+        mountPath: /mnt/synrs3d
+      - name: chuqiao-result-pvc
+        mountPath: /mnt/styled
+    securityContext:
+      runAsUser: 0
+  volumes:
+    - name: pvc-storage
+      persistentVolumeClaim:
+        claimName: synrs3d-test
+    - name: chuqiao-result-pvc
+      persistentVolumeClaim:
+        claimName: chuqiao-result-pvc
