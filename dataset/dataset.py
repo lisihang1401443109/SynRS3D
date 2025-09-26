@@ -6,6 +6,7 @@ from typing import Optional, List, Dict
 import random
 import albumentations as A
 from utils.datasets_config import get_dataset_category,labelmap,combination_relabel_rules, normal_relabel_rules
+import torch
 
 class MultiTaskDataSet(data.Dataset):
     def __init__(self, root, 
