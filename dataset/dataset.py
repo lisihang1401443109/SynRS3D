@@ -166,6 +166,11 @@ class MultiTaskDataSet(data.Dataset):
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
+                # convert these back to torch
+                if isinstance(image, np.ndarray):
+                    image = torch.from_numpy(image)
+                transformed_masks = [torch.from_numpy(mask) if isinstance(mask, np.ndarray) else mask for mask in transformed_masks]
+                
                 # Update the result dict with transformed data
                 result_dict["image"] = image
                 if "dsm" in result_dict:
