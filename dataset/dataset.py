@@ -42,6 +42,8 @@ class MultiTaskDataSet(data.Dataset):
         
         #! modification: stylization
         self.stylized_p=stylized_p
+        #! modification: skipped transforms
+        self.skipped_transforms = 0
         
         if self.apply_da:
             for dir in tgt_root_dir:
@@ -153,21 +155,14 @@ class MultiTaskDataSet(data.Dataset):
                 for mask in ready_mask:
                     if isinstance(mask, torch.Tensor):
                         mask = mask.numpy()
-                #for mask in ready_mask:
-                    # print('------masks strides: ', mask.strides)
-                # check the type of image
-                print('------image type: ', type(image))
-                # mask type check
-                for mask in ready_mask:
-                    print('------mask type: ', type(mask))
-                if isinstance(image, np.ndarray):
-                    pass
-                elif isinstance(image, torch.Tensor):
-                    image = image.numpy()
-                else:
-                    raise TypeError('Unsupported image type: ', type(image))
                 
-                augmented = self.transforms(image=image, masks=ready_mask)
+                try:    
+                    augmented = self.transforms(image=image, masks=ready_mask)
+                except Exception as e:
+                    self.skipped_transforms += 1
+                    augmented = {'image': image, 'masks': ready_mask}
+                    print(f"Skipped transforms for image {image_path}: {e}")
+                    
                 image = augmented['image']
                 transformed_masks = augmented['masks']
                 
