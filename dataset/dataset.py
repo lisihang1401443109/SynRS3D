@@ -161,7 +161,7 @@ class MultiTaskDataSet(data.Dataset):
                 except Exception as e:
                     self.skipped_transforms += 1
                     augmented = {'image': image, 'masks': ready_mask}
-                    print(f"Skipped transforms for image {image_path}: {e}")
+                    print(f"Skipped transforms for image: {e}")
                     
                 image = augmented['image']
                 transformed_masks = augmented['masks']
