@@ -256,6 +256,15 @@ def main():
             
             if args.multi_task:
                 seg_maps = batch['ss_mask'].to(device)
+                
+            if args.multi_task:
+                # Get segmentation masks and ensure proper shape (batch, height, width)
+                if seg_maps.dim() == 4:  # If shape is [batch, height, 1, width]
+                    if seg_maps.size(2) == 1:  # If the third dimension is 1
+                        seg_maps = seg_maps.squeeze(2)  # Remove the third dimension
+                    else:
+                        # If not 1, we need to permute dimensions to [batch, height, width]
+                        seg_maps = seg_maps.permute(0, 2, 3, 1).squeeze(-1)
             
             # Forward pass
             outputs = model(images)

@@ -167,14 +167,14 @@ class MultiTaskDataSet(data.Dataset):
                     
                 image = augmented['image']
                 transformed_masks = augmented['masks']
-
-                print("image shape after transform: ", image.shape)
-                print("mask shape after transform: ", [mask.shape for mask in transformed_masks])
                 
                 # convert these back to torch
                 if isinstance(image, np.ndarray):
                     image = torch.from_numpy(image)
                 transformed_masks = [torch.from_numpy(mask) if isinstance(mask, np.ndarray) else mask for mask in transformed_masks]
+                
+                print("image shape after transform: ", image.shape)
+                print("mask shape after transform: ", [mask.shape for mask in transformed_masks])
                 
                 # Update the result dict with transformed data
                 result_dict["image"] = image
