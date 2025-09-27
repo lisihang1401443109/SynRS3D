@@ -249,10 +249,10 @@ def main():
                 
             # Get batch data
             images = batch['image'].to(device)
-            height_maps = batch['height'].to(device)
+            height_maps = batch['dsm'].to(device)
             
             if args.multi_task:
-                seg_maps = batch['mask'].to(device)
+                seg_maps = batch['ss_mask'].to(device)
             
             # Forward pass
             outputs = model(images)
