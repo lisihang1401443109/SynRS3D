@@ -126,7 +126,7 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
     transforms = [
         A.RandomCrop(crop_size, crop_size, always_apply=True),
         policy,
-        ToTensorV2()
+        # ToTensorV2()
     ]
     
     return A.Compose(transforms)
