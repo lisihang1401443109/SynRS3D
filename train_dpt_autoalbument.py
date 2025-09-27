@@ -124,8 +124,8 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
     
     # Create a list of transforms
     transforms = [
-        A.RandomCrop(crop_size, crop_size, always_apply=True),
         policy,
+        A.RandomCrop(crop_size, crop_size, always_apply=True),
         # ToTensorV2()
     ]
     
@@ -172,6 +172,7 @@ def main():
     ).to(device)
     
     # Setup data loaders with AutoAlbument transforms
+    print(f'AutoAlbument policy: {args.policy_path}, crop size: {args.crop_size}')
     train_transforms = get_autoalbument_transforms(args.policy_path, args.crop_size)
     
     # Training dataset
