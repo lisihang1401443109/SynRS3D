@@ -155,6 +155,8 @@ class MultiTaskDataSet(data.Dataset):
                 for mask in ready_mask:
                     if isinstance(mask, torch.Tensor):
                         mask = mask.numpy()
+                print("image shape before transform: ", image.shape)
+                print("mask shape before transform: ", [mask.shape for mask in ready_mask])
                 
                 try:    
                     augmented = self.transforms(image=image, masks=ready_mask)
@@ -165,6 +167,9 @@ class MultiTaskDataSet(data.Dataset):
                     
                 image = augmented['image']
                 transformed_masks = augmented['masks']
+
+                print("image shape after transform: ", image.shape)
+                print("mask shape after transform: ", [mask.shape for mask in transformed_masks])
                 
                 # convert these back to torch
                 if isinstance(image, np.ndarray):
