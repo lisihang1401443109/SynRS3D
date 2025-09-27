@@ -119,11 +119,13 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
     """
     # Load the AutoAlbument policy
     policy = A.load(policy_path, data_format='json')
+    # print the policy
+    print(policy)
     
     # Create a list of transforms
     transforms = [
-        A.RandomCrop(crop_size, crop_size, always_apply=True),
         policy,
+        A.RandomCrop(crop_size, crop_size, always_apply=True),
         # ToTensorV2()
     ]
     
