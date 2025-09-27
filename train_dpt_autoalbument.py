@@ -266,6 +266,8 @@ def main():
             
             if args.multi_task:
                 seg_pred = outputs['segmentation']
+                # print the shape
+                print(seg_pred.shape, seg_maps.shape)
                 seg_loss = segmentation_criterion(seg_pred, seg_maps.long())
                 loss = height_loss + seg_loss
             else:
