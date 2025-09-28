@@ -365,8 +365,13 @@ def main():
 
         # Move tensors to GPU and handle data types
         images, dsms = images.cuda(), dsms.cuda()
+        # if ss_masks is not None:
+        #     ss_masks = ss_masks.squeeze(dim=1).long().cuda()
         if ss_masks is not None:
-            ss_masks = ss_masks.squeeze(dim=1).long().cuda()
+            # Ensure the mask is 3D [batch, height, width]
+            if ss_masks.dim() == 4 and ss_masks.size(1) == 1:
+                ss_masks = ss_masks.squeeze(1)  # Remove channel dimension if it's 1
+            ss_masks = ss_masks.long().cuda()
 
         model.train()
         optimizer.zero_grad()
