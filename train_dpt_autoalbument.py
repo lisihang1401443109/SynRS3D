@@ -31,6 +31,7 @@ from models.dpt import DPT_DINOv2
 from torch.utils.tensorboard import SummaryWriter
 from albumentations import Compose, RandomCrop, HorizontalFlip, VerticalFlip, RandomRotate90, Normalize, OneOf, CenterCrop, GaussianBlur
 from albumentations.pytorch import ToTensorV2
+import albumentations as A
                 
 def get_arguments():
     """Parse all the arguments provided from the CLI.
