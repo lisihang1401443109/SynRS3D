@@ -349,6 +349,8 @@ def main():
     optimizer.zero_grad()
     best_metrics = {'HE': float('inf'), 'SS': float('-inf')}
     best_model_paths = {'HE': None, 'SS': None}
+    # print device
+    print(f"Device: {device}")
     
     for i_iter in range(args.start_iters, args.num_steps):
         # training on source
@@ -399,6 +401,7 @@ def main():
         images = images.to(device)
         # move model to device
         model.to(device)
+        
         
         pre_outputs = model(images)
 
