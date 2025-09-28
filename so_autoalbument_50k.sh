@@ -8,7 +8,7 @@ da=()
 
 POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest_392.json"
 
-python train_dpt_sourceonly.py \
+python train_dpt_autoalbument.py \
 --root_dir /mnt/synrs3d/SynRS3D/data \
 --datasets ${train_set[*]} \
 --test_datasets ${test_set[*]} \
@@ -16,7 +16,7 @@ python train_dpt_sourceonly.py \
 --crop_size 392 \
 --encoder vitl \
 --decoder DPT \
---snapshot_dir /mnt/synrs3d/SynRS3D/snapshot_so_baseline_50k\
+--snapshot_dir /mnt/synrs3d/SynRS3D/snapshot_so_baseline_50k \
 --images_file ${images_file[*]} \
 --batch_size 1 \
 --learning_rate 1e-6 \
