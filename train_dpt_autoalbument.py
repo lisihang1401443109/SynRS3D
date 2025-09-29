@@ -372,6 +372,9 @@ def main():
             if ss_masks.dim() == 4 and ss_masks.size(1) == 1:
                 ss_masks = ss_masks.squeeze(1)  # Remove channel dimension if it's 1
             ss_masks = ss_masks.long().cuda()
+        # print mask shape
+        print(ss_masks.shape)
+        
 
         model.train()
         optimizer.zero_grad()
