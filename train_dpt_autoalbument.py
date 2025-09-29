@@ -373,7 +373,7 @@ def main():
                 ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
             ss_masks = ss_masks.long().cuda()
         # print mask shape
-        print(ss_masks.shape)
+        # print(ss_masks.shape)
         
 
         model.train()
