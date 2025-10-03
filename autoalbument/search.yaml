@@ -23,7 +23,7 @@ policy_model:
   # `temperature` Relaxed Bernoulli distribution behaves like Bernoulli distribution. In the paper, the authors
   # of Faster AutoAugment used 0.05 as a default value for `temperature`.
 
-  num_sub_policies: 10
+  num_sub_policies: 1
   # Number of augmentation sub-policies. When an image passes through an augmentation pipeline, Faster AutoAugment
   # randomly chooses one sub-policy and uses augmentations from that sub-policy to transform an input image. A larger
   # number of sub-policies leads to a more diverse set of augmentations and better performance of a model trained on
@@ -38,7 +38,7 @@ policy_model:
   # phase. When you train a model with found sub-policies, Albumentations will apply a distinct set of transformations
   # to each image separately.
 
-  operation_count: 4
+  operation_count: 3
   # Number of consecutive augmentations in each sub-policy. Faster AutoAugment will sequentially apply `operation_count`
   # augmentations from a sub-policy to an image. Larger values of `operation_count` lead to better performance of
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search
