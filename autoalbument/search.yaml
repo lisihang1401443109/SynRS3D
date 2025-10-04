@@ -81,7 +81,7 @@ data:
     root: /mnt/synrs3d/SynRS3D/data/grid_g005_mid_v1
     image_dir: opt
     mask_dir: gt_ss_mask
-    split_file: subset_train.txt
+    split_file: train.txt
     num_classes: 5
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
   # the `instantiate` method from Hydra - https://hydra.cc/docs/next/patterns/instantiate_objects/overview/.

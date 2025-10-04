@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sihang-autoalbument-train-50k-debug
+  namespace: gp-engine-malof
+  labels:
+    app: sihang-autoalbument-train-50k-debug
+spec:
+  restartPolicy: Never
+  containers:
+    - name: autoalbument-debug-container
+      image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+      imagePullPolicy: Always
+      command:
+        - /bin/bash
+        - '-c'
+      args:
+        - |
+          # Activate base environment
+          source activate base
+
+          # Create new conda environment if not exists
+          conda env list | grep -q "^synrs3d\s" || conda create -n synrs3d python=3.11 -y
+
+          # Activate the new environment
+          source activate synrs3d
+
+          # Install PyTorch with CUDA support
+          pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+          # Install GDAL
+          conda install gdal -y
+
+          # Install Python packages
+          python -m pip install albumentations==2.0.5 tqdm ever-beta==0.2.3 huggingface_hub rasterio
+          python -m pip install scikit-learn
+
+          # Install AutoAlbument
+          pip install autoalbument==1.4
+
+          echo "Dependencies installed"
+
+          # Replace the albumentations transform file
+          if [ -f /mnt/synrs3d/swap_env_files/transforms.py ]; then
+            rm -f /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py || true
+            cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
+          fi
+
+          # Navigate to SynRS3D directory
+          cd /mnt/synrs3d/SynRS3D || exit 1
+
+          # Make sure we have the latest code
+          git checkout gaussian-baselines || true
+          git pull || true
+
+          echo "Environment ready. Sleeping for debugging..."
+          sleep infinity
+      resources:
+        limits:
+          cpu: '16'
+          memory: 32Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '8'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      volumeMounts:
+        - name: pvc-storage
+          mountPath: /mnt/synrs3d
+        - name: chuqiao-result-pvc
+          mountPath: /mnt/styled
+      securityContext:
+        runAsUser: 0
+  volumes:
+    - name: pvc-storage
+      persistentVolumeClaim:
+        claimName: synrs3d-test
+    - name: chuqiao-result-pvc
+      persistentVolumeClaim:
+        claimName: chuqiao-result-pvc
