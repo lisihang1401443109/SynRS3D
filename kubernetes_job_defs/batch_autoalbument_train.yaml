@@ -69,7 +69,8 @@ spec:
 
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
-              bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
+              bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh \
+                "/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-04/17-54-39/policy/latest_392.json"
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log

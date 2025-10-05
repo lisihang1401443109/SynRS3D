@@ -1,4 +1,9 @@
 #!/bin/bash
+POLICY_PATH="${1:-}"
+if [ -z "$POLICY_PATH" ]; then
+  echo "Usage: $0 <POLICY_PATH>"
+  exit 1
+fi
 train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
 # train_set=('grid_g005_mid_v2')
 test_set=('DFC18' 'DFC19_JAX' 'DFC19_OMA' 'geonrw_rural' 'geonrw_urban' 'OGC_ARG' 'OGC_ATL')
@@ -6,7 +11,8 @@ test_set=('DFC18' 'DFC19_JAX' 'DFC19_OMA' 'geonrw_rural' 'geonrw_urban' 'OGC_ARG
 images_file=('train.txt' 'test_syn.txt' 'train.txt')
 da=()
 
-POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest_392.json"
+# POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest_392.json"
+
 
 python train_dpt_autoalbument.py \
 --root_dir /mnt/synrs3d/SynRS3D/data \
@@ -31,7 +37,7 @@ python train_dpt_autoalbument.py \
 --shuffle \
 --only_save_best \
 --decoder_lr_weight 10 \
---policy_path $POLICY_PATH \
+--policy_path "$POLICY_PATH" \
 --lambda_dsms 1.0 \
 #optional
 #--eval_oem
