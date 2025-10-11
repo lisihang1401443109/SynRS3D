@@ -113,10 +113,10 @@ data:
 
   preprocessing:
   - LongestMaxSize:
-      max_size: 256
+      max_size: 392
   - PadIfNeeded:
-      min_height: 256
-      min_width: 256
+      min_height: 392
+      min_width: 392
       border_mode: 0
       value: [0, 0, 0]
   # A list of preprocessing augmentations that will be applied to each image before applying augmentations from

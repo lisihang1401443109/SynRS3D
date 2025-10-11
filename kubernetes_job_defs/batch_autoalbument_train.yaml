@@ -43,8 +43,8 @@ spec:
               python -m pip install albumentations==2.0.5 tqdm ever-beta==0.2.3 huggingface_hub rasterio
               python -m pip install scikit-learn
               
-              # Install AutoAlbument
-              pip install autoalbument==1.4.18
+              # # Install AutoAlbument
+              # pip install autoalbument==1.4.18
 
               echo "Dependencies installed"
 
@@ -60,7 +60,8 @@ spec:
               git checkout gaussian-baselines
               git pull
               
-              cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
+              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
+              cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
 
               
               # Print the version of autoalbument
