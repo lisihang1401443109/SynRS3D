@@ -18,7 +18,7 @@ spec:
       containers:
         - name: autoalbument-container
           image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command:
             - /bin/bash
             - '-c'
@@ -61,7 +61,8 @@ spec:
               git pull
               
               # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
-              cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
+              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
+              cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
 
               
               # Print the version of autoalbument
@@ -71,7 +72,7 @@ spec:
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh \
-                "/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-04/17-54-39/policy/latest_392.json"
+                "/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json"
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log

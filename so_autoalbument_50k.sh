@@ -12,7 +12,7 @@ images_file=('train.txt' 'test_syn.txt' 'train.txt')
 da=()
 
 # POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest_392.json"
-POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy/latest_392.json"
+# POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy/latest_392.json"
 
 python train_dpt_autoalbument.py \
 --root_dir /mnt/synrs3d/SynRS3D/data \
