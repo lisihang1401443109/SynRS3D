@@ -30,7 +30,7 @@ policy_model:
   # augmented images. However, an increase in the number of sub-policies leads to the exponential growth of a search
   # space of augmentations, so you need more training data for Policy Model to find good augmentation policies.
 
-  num_chunks: 4
+  num_chunks: 2
   # Number of chunks in a batch. Faster AutoAugment splits each batch of images into `num_chunks` chunks. Then it
   # applies the same sub-policy with the same parameters to each image in a chunk. This parameter controls the tradeoff
   # between the speed of augmentation search and diversity of augmentations. Larger `num_chunks` values will lead to
@@ -38,7 +38,7 @@ policy_model:
   # phase. When you train a model with found sub-policies, Albumentations will apply a distinct set of transformations
   # to each image separately.
 
-  operation_count: 3
+  operation_count: 2
   # Number of consecutive augmentations in each sub-policy. Faster AutoAugment will sequentially apply `operation_count`
   # augmentations from a sub-policy to an image. Larger values of `operation_count` lead to better performance of
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search
@@ -54,7 +54,7 @@ semantic_segmentation_model:
   # a semantic segmentation model.
   # This model takes four parameters: `num_classes`, `architecture`, `encoder_architecture` and `pretrained`.
 
-  num_classes: 5
+  num_classes: 8
   # The number of classes in the dataset. The dataset implementation should return a mask as a NumPy array with
   # the shape [height, width, num_classes]. In a case of binary segmentation you can set `num_classes` to 1.
 
@@ -78,11 +78,11 @@ semantic_segmentation_model:
 data:
   dataset:
     _target_: dataset.AutoAlbumentDataset
-    root: /mnt/synrs3d/SynRS3D/data/grid_g005_mid_v1
+    root: /mnt/synrs3d/SynRS3D/data/grid_g05_mid_v1
     image_dir: opt
     mask_dir: gt_ss_mask
     split_file: train.txt
-    num_classes: 5
+    num_classes: 8
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
   # the `instantiate` method from Hydra - https://hydra.cc/docs/next/patterns/instantiate_objects/overview/.
   #
@@ -160,13 +160,13 @@ data:
 optim:
   main:
     _target_: torch.optim.Adam
-    lr: 1e-3
+    lr: 1e-6
     betas: [0, 0.999]
   # Optimizer configuration for the main (either Classification or Semantic Segmentation) Model
 
   policy:
     _target_: torch.optim.Adam
-    lr: 1e-3
+    lr: 1e-6
     betas: [0, 0.999]
   # Optimizer configuration for Policy Model
 
