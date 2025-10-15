@@ -1,0 +1,120 @@
+{
+    "__version__": "1.4.18",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "position": "center",
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "OneOf",
+                "p": 1,
+                "transforms": [
+                    {
+                        "__class_fullname__": "Sequential",
+                        "p": 1.0,
+                        "transforms": [
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.9977858097340462
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.01779073476791382,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            134,
+                                            134
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.981898567302088
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "HorizontalFlip",
+                                        "p": 0.3073444366455078
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.6926555633431668
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "__class_fullname__": "Normalize",
+                "p": 1.0,
+                "mean": [
+                    0.48500001430511475,
+                    0.4560000002384186,
+                    0.4059999883174896
+                ],
+                "std": [
+                    0.2290000021457672,
+                    0.2240000069141388,
+                    0.22499999403953552
+                ],
+                "max_pixel_value": 255.0,
+                "normalization": "standard"
+            },
+            {
+                "__class_fullname__": "ToTensorV2",
+                "p": 1.0,
+                "transpose_mask": true
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}

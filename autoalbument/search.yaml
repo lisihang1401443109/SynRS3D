@@ -9,7 +9,7 @@ task: semantic_segmentation # Deep learning task. Should either be `classificati
 policy_model:
   # Settings for Policy Model that searches augmentation policies.
 
-  task_factor: 0.1
+  task_factor: 0.5
   # Multiplier for segmentation loss of a model. Faster AutoAugment uses segmentation loss to prevent augmentations
   # from transforming images of a particular class to another class.
 
@@ -104,7 +104,7 @@ data:
   # dataset_file: /projects/pytorch/dataset.py
   #
 
-  input_dtype: uint8
+  input_dtype: float32
   # The data type of input images. Two values are supported:
   # - uint8. In that case, all input images should be NumPy arrays with the np.uint8 data type and values in the range
   #   [0, 255].
