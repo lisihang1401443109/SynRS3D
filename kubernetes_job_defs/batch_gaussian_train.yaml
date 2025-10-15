@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-gaussian-train-50k-job-s-1.0
+  name: sihang-gaussian-train-50k-job-s-1.5
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-gaussian-train-50k-job-s-1.0
+    job-name: sihang-gaussian-train-50k-job-s-1.5
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-gaussian-train-50k-job-s-1.0
+        job-name: sihang-gaussian-train-50k-job-s-1.5
     spec:
       restartPolicy: Never
       containers:
@@ -69,7 +69,7 @@ spec:
 
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
-              bash /mnt/synrs3d/SynRS3D/so_50kit_gaussian.sh 1.0
+              bash /mnt/synrs3d/SynRS3D/so_50kit_gaussian.sh 1.5
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
