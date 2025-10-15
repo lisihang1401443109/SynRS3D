@@ -103,6 +103,8 @@ def get_arguments():
     # gaussian blur
     parser.add_argument("--gaussian_p", type=float, default=0.0, 
                        help="probability of applying gaussian blur (0.0 means no blur, 1.0 means always apply)")
+    parser.add_argument("--gaussian_s", type=float, default=1.0, 
+                       help="sigma of gaussian blur, scaled to the range (0.5, 2)")
     parser.add_argument("--style_aug_p", type=float, default=0.0, 
                        help="probability of applying style augmentation")
 
@@ -227,7 +229,7 @@ def main():
     ], p=0.75),
     ]
     if args.gaussian_p > 0:
-        transforms_list.append(GaussianBlur(blur_limit=(3, 7), p=args.gaussian_p))
+        transforms_list.append(GaussianBlur(sigma_limit=(0.5*args.gaussian_s, 2*args.gaussian_s), p=args.gaussian_p))
     transforms_list.append(Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True))
     transforms_list.append(ToTensorV2())
     

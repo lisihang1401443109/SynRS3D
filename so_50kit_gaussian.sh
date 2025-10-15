@@ -5,6 +5,8 @@ test_set=('DFC18' 'DFC19_JAX' 'DFC19_OMA' 'geonrw_rural' 'geonrw_urban' 'OGC_ARG
 
 images_file=('train.txt' 'test_syn.txt' 'train.txt')
 da=()
+# take style_s from cmd
+style_s=$1
 
 python train_dpt_sourceonly.py \
 --root_dir /mnt/synrs3d/SynRS3D/data \
@@ -30,6 +32,7 @@ python train_dpt_sourceonly.py \
 --only_save_best \
 --decoder_lr_weight 10 \
 --lambda_dsms 1.0 \
---gaussian_p 0.5
+--gaussian_p 0.5 \
+--gaussian_s $style_s
 #optional
 #--eval_oem
