@@ -9,7 +9,7 @@ task: semantic_segmentation # Deep learning task. Should either be `classificati
 policy_model:
   # Settings for Policy Model that searches augmentation policies.
 
-  task_factor: 0.5
+  task_factor: 1
   # Multiplier for segmentation loss of a model. Faster AutoAugment uses segmentation loss to prevent augmentations
   # from transforming images of a particular class to another class.
 
@@ -38,7 +38,7 @@ policy_model:
   # phase. When you train a model with found sub-policies, Albumentations will apply a distinct set of transformations
   # to each image separately.
 
-  operation_count: 2
+  operation_count: 1
   # Number of consecutive augmentations in each sub-policy. Faster AutoAugment will sequentially apply `operation_count`
   # augmentations from a sub-policy to an image. Larger values of `operation_count` lead to better performance of
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search

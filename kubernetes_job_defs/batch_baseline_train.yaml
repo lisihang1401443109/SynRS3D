@@ -70,7 +70,9 @@ spec:
 
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
-              bash /mnt/synrs3d/SynRS3D/so_50kit_baseline.sh
+              # bash /mnt/synrs3d/SynRS3D/so_50kit_baseline.sh
+              bash /mnt/synrs3d/SynRS3D/so_50kit_gaussian.sh
+              
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
