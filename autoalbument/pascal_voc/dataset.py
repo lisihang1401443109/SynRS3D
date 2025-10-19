@@ -57,7 +57,7 @@ VOC_COLORMAP = [
 
 
 class PascalVOCSearchDataset(VOCSegmentation):
-    def __init__(self, root="~/data/pascal_voc", image_set="train", download=True, transform=None):
+    def __init__(self, root="/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data", image_set="train", download=True, transform=None):
         super().__init__(root=root, image_set=image_set, download=download, transform=transform)
 
     @staticmethod
