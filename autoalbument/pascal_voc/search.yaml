@@ -80,7 +80,7 @@ semantic_segmentation_model:
 data:
   dataset:
     _target_: dataset.PascalVOCSearchDataset
-    root: ~/data/pascal_voc
+    root: /mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data
     image_set: train
     download: false
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
