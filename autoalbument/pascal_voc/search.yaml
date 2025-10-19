@@ -82,7 +82,7 @@ data:
     _target_: dataset.PascalVOCSearchDataset
     root: ~/data/pascal_voc
     image_set: train
-    download: true
+    download: false
   # Class for the PyTorch Dataset and arguments to it. AutoAlbument will create an object of this class using
   # the `instantiate` method from Hydra - https://hydra.cc/docs/next/patterns/instantiate_objects/overview/.
   #
