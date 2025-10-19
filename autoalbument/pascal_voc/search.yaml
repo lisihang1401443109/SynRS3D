@@ -151,7 +151,7 @@ data:
     _target_: torch.utils.data.DataLoader
     batch_size: 8
     shuffle: true
-    num_workers: 0
+    num_workers: 8
     pin_memory: true
     drop_last: true
   # Parameters for the PyTorch DataLoader. Please refer to the PyTorch documentation for the description of parameters -
