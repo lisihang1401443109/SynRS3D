@@ -47,6 +47,25 @@ policy_model:
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search
   # and increase the searching time.
 
+  operations:
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+    shift_r: true
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+    shift_g: true
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+    shift_b: true
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
+  # - _target_: autoalbument.faster_autoaugment.models.policy_operations.Solarize
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.HorizontalFlip
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.VerticalFlip
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.Rotate
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftX
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftY
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.Scale
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.CutoutFixedNumberOfHoles
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.CutoutFixedSize
+
 
 classification_model:
   # Settings for Classification Model that is used for two purposes:
