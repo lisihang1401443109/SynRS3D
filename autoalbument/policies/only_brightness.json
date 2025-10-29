@@ -1,0 +1,93 @@
+{
+    "__version__": "1.4.18",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "position": "center",
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "OneOf",
+                "p": 1,
+                "transforms": [
+                    {
+                        "__class_fullname__": "Sequential",
+                        "p": 1.0,
+                        "transforms": [
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.5226849913597107,
+                                        "brightness_limit": [
+                                            0.14843523502349854,
+                                            0.14843523502349854
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.4773150086402893
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "__class_fullname__": "Normalize",
+                "p": 1.0,
+                "mean": [
+                    123.675,
+                    116.28,
+                    103.53
+                ],
+                "std": [
+                    58.395,
+                    57.12,
+                    57.375
+                ],
+                "max_pixel_value": 1.0,
+                "normalization": "standard"
+            },
+            {
+                "__class_fullname__": "ToTensorV2",
+                "p": 1.0,
+                "transpose_mask": true
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}

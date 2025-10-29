@@ -89,6 +89,8 @@ spec:
               mountPath: /mnt/synrs3d
             - name: chuqiao-result-pvc
               mountPath: /mnt/styled
+            - name: shm
+              mountPath: /dev/shm
           securityContext:
               runAsUser: 0
       volumes:
@@ -98,3 +100,6 @@ spec:
         - name: chuqiao-result-pvc
           persistentVolumeClaim:
             claimName: chuqiao-result-pvc
+        - name: shm
+          emptyDir:
+            medium: Memory
