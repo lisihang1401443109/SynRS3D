@@ -291,7 +291,7 @@ def main():
                                 #! stylization
                                 stylized_p = args.stylized_p
                                 )
-    syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=8)
 
     test_data_path = [os.path.join(args.root_dir, dataset) for dataset in args.test_datasets]
     testing_transforms = Compose([
