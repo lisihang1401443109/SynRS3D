@@ -44,8 +44,8 @@ policy_model:
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search
   # and increase the searching time.
 
-  # operations:
-  # - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+  operations:
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
 
 semantic_segmentation_model:
   # Settings for Semantic Segmentation Model that is used for two purposes:
@@ -153,7 +153,7 @@ data:
 
   dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: 32
+    batch_size: 16
     shuffle: true
     num_workers: 8
     pin_memory: true
