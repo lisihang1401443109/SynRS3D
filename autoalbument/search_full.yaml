@@ -44,8 +44,8 @@ policy_model:
   # a model trained on augmented images. Simultaneously, larger values of `operation_count` affect the speed of search
   # and increase the searching time.
 
-  # operations:
-  # - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+  operations:
+  - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
 
 semantic_segmentation_model:
   # Settings for Semantic Segmentation Model that is used for two purposes:
