@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pascal-train-job
+  namespace: gp-engine-malof
+  labels:
+    job-name: pascal-train-job
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        job-name: pascal-train-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pascal-train
+          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+          imagePullPolicy: Always
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              source activate base
+              conda create -n synrs3d python=3.11 -y
+              source activate synrs3d
+
+              pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+              conda install gdal -y
+              python -m pip install albumentations==2.0.5 tensorboard
+              python -m pip install autoalbument==1.4.18
+
+              echo "Deps installed"
+
+              cd /mnt/synrs3d/SynRS3D
+
+              POLICY_JSON_PATH=${POLICY_JSON_PATH:-""}
+              DATA_ROOT=${DATA_ROOT:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data"}
+              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/outputs/pascal"}
+              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/runs/pascal"}
+
+              mkdir -p "$OUT_DIR" "$LOG_DIR"
+
+              PYTHONPATH=/mnt/synrs3d/SynRS3D:$PYTHONPATH \
+              python autoalbument/pascal_voc/train_pascal.py \
+                --data_root "$DATA_ROOT" \
+                --epochs ${EPOCHS:-50} \
+                --batch_size ${BATCH_SIZE:-8} \
+                --workers ${WORKERS:-4} \
+                --lr ${LR:-0.01} \
+                --weight_decay ${WEIGHT_DECAY:-1e-4} \
+                --size ${SIZE:-320} \
+                --pretrained \
+                --output_dir "$OUT_DIR" \
+                --log_dir "$LOG_DIR" \
+                ${DOWNLOAD:+--download} \
+                ${ONLY_POLICY:+--only_policy} \
+                ${POLICY_JSON_PATH:+--policy_json "$POLICY_JSON_PATH"}
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+          resources:
+            limits:
+              cpu: "8"
+              memory: 32Gi
+              nvidia.com/gpu: "1"
+            requests:
+              cpu: "4"
+              memory: 16Gi
+              nvidia.com/gpu: "1"
+          volumeMounts:
+            - name: pvc-storage
+              mountPath: /mnt/synrs3d
+            - name: shm
+              mountPath: /dev/shm
+          securityContext:
+            runAsUser: 0
+      volumes:
+        - name: pvc-storage
+          persistentVolumeClaim:
+            claimName: synrs3d-test
+        - name: shm
+          emptyDir:
+            medium: Memory
