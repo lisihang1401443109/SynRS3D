@@ -42,6 +42,8 @@ spec:
 
               mkdir -p "$OUT_DIR" "$LOG_DIR"
 
+              git pull
+
               PYTHONPATH=/mnt/synrs3d/SynRS3D:$PYTHONPATH \
               python autoalbument/pascal_voc/train_pascal.py \
                 --data_root "$DATA_ROOT" \
@@ -54,9 +56,8 @@ spec:
                 --pretrained \
                 --output_dir "$OUT_DIR" \
                 --log_dir "$LOG_DIR" \
-                ${DOWNLOAD:+--download} \
-                ${ONLY_POLICY:+--only_policy} \
-                ${POLICY_JSON_PATH:+--policy_json "$POLICY_JSON_PATH"}
+                --download \
+                --policy_json "/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/outputs/2025-10-27/06-55-07/policy/latest.json"
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all

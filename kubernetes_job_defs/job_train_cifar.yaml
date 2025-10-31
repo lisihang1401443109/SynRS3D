@@ -40,6 +40,8 @@ spec:
               OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/outputs/cifar"}
               LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/runs/cifar"}
 
+              git pull 
+
               mkdir -p "$OUT_DIR" "$LOG_DIR"
 
               PYTHONPATH=/mnt/synrs3d/SynRS3D:$PYTHONPATH \
@@ -52,9 +54,8 @@ spec:
                 --weight_decay ${WEIGHT_DECAY:-5e-4} \
                 --output_dir "$OUT_DIR" \
                 --log_dir "$LOG_DIR" \
-                ${DOWNLOAD:+--download} \
-                ${ONLY_POLICY:+--only_policy} \
-                ${POLICY_JSON_PATH:+--policy_json "$POLICY_JSON_PATH"}
+                --download \
+                --policy_json "/mnt/synrs3d/SynRS3D/autoalbument/cifar/outputs/2025-10-27/06-48-11/policy/latest.json"
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all
