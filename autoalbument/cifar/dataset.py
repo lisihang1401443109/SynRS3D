@@ -1,7 +1,8 @@
 import cv2
 import torchvision
 import torch
-import PIL
+import numpy as np
+from PIL import Image
 
 cv2.setNumThreads(0)
 cv2.ocl.setUseOpenCL(False)
@@ -32,7 +33,7 @@ class Cifar10TrainDataset(torchvision.datasets.CIFAR10):
         if isinstance(image, torch.Tensor):
             image = image.numpy()
         # if PIL Image
-        elif isinstance(image, PIL.Image.Image):
+        elif isinstance(image, Image.Image):
             image = np.array(image)
         
 
