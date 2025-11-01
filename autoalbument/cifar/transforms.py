@@ -39,7 +39,7 @@ def get_policy_train_transforms(policy_json_path: str):
     transforms = [
         A.RandomCrop(32, 32, always_apply=True),
         policy,
-        A.Normalize(mean=(0.4914, 0.4822, 0.4465), std=(0.2023, 0.1994, 0.2010)),
+        # A.Normalize(mean=(0.4914, 0.4822, 0.4465), std=(0.2023, 0.1994, 0.2010)),
         ToTensorV2(),
     ]
     return A.Compose(transforms)
