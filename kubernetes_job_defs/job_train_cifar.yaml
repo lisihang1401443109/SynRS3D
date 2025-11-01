@@ -56,9 +56,6 @@ spec:
                 --log_dir "$LOG_DIR" \
                 --download \
                 --policy_json "/mnt/synrs3d/SynRS3D/autoalbument/cifar/outputs/2025-10-27/06-48-11/policy/latest.json"
-          env:
-            - name: NVIDIA_VISIBLE_DEVICES
-              value: all
           resources:
             limits:
               cpu: "8"

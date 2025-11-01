@@ -1,7 +1,8 @@
 #!/bin/bash
 POLICY_PATH="${1:-}"
+SNAPSHOT_DIR="${2:-/mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k}"
 if [ -z "$POLICY_PATH" ]; then
-  echo "Usage: $0 <POLICY_PATH>"
+  echo "Usage: $0 <POLICY_PATH> [SNAPSHOT_DIR]"
   exit 1
 fi
 train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
@@ -22,7 +23,7 @@ python train_dpt_autoalbument.py \
 --crop_size 392 \
 --encoder vitl \
 --decoder DPT \
---snapshot_dir /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k \
+--snapshot_dir "$SNAPSHOT_DIR" \
 --images_file ${images_file[*]} \
 --batch_size 1 \
 --learning_rate 1e-6 \

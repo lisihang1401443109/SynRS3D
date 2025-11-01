@@ -87,3 +87,24 @@ class PascalVOCSearchDataset(VOCSegmentation):
             image = transformed["image"]
             mask = transformed["mask"]
         return image, mask
+    
+class PascalVOCTrainDataset(VOCSegmentation):
+    def __init__(self, root="/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data", image_set="train", download=True, transform=None):
+        super().__init__(root=root, image_set=image_set, download=download, transform=transform)
+        
+    def __getitem__(self, index):
+        image = cv2.imread(self.images[index])
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        mask = cv2.imread(self.masks[index])
+        mask = cv2.cvtColor(mask, cv2.COLOR_BGR2RGB)
+        mask = self._convert_to_segmentation_mask(mask)
+        if self.transform is not None:
+            # convert to numpy array
+            if isinstance(image, torch.Tensor):
+                image = image.numpy()
+            if isinstance(mask, torch.Tensor):
+                mask = mask.numpy()
+            transformed = self.transform(image=image, mask=mask)
+            image = transformed["image"]
+            mask = transformed["mask"]
+        return image, mask

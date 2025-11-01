@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 import torchvision
 from torch.utils.tensorboard import SummaryWriter
 
-from autoalbument.pascal_voc.dataset import PascalVOCSearchDataset, VOC_CLASSES
+from autoalbument.pascal_voc.dataset import PascalVOCTrainDataset, PascalVOCSearchDataset, VOC_CLASSES
 from autoalbument.pascal_voc.transforms import (
     get_base_train_transforms,
     get_policy_train_transforms,
@@ -25,6 +25,11 @@ def set_seed(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
+    
+# check if cuda is available
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
+
 
 
 @torch.no_grad()
@@ -88,8 +93,8 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
 
 
 def build_loaders(root, batch_size, workers, train_tfms, test_tfms, download):
-    train_set = PascalVOCSearchDataset(root=root, image_set="train", download=download, transform=train_tfms)
-    val_set = PascalVOCSearchDataset(root=root, image_set="val", download=download, transform=test_tfms)
+    train_set = PascalVOCTrainDataset(root=root, image_set="train", download=download, transform=train_tfms)
+    val_set = PascalVOCTrainDataset(root=root, image_set="val", download=download, transform=test_tfms)
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=workers, pin_memory=True)
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=workers, pin_memory=True)
     return train_loader, val_loader

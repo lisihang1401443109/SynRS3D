@@ -11,7 +11,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from autoalbument.cifar.dataset import Cifar10SearchDataset
+from autoalbument.cifar.dataset import Cifar10TrainDataset
 from autoalbument.cifar.wrn import wide_resnet_28x10
 from autoalbument.cifar.transforms import (
     get_base_train_transforms,
@@ -19,6 +19,9 @@ from autoalbument.cifar.transforms import (
     get_test_transforms,
 )
 
+# check if cuda is available 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 def set_seed(seed):
     random.seed(seed)
@@ -76,8 +79,8 @@ def train_one(model, train_loader, test_loader, device, epochs, lr, weight_decay
 
 
 def build_loaders(root, batch_size, workers, train_tfms, test_tfms, download):
-    train_set = Cifar10SearchDataset(root=root, train=True, download=download, transform=train_tfms)
-    test_set = Cifar10SearchDataset(root=root, train=False, download=download, transform=test_tfms)
+    train_set = Cifar10TrainDataset(root=root, train=True, download=download, transform=train_tfms)
+    test_set = Cifar10TrainDataset(root=root, train=False, download=download, transform=test_tfms)
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=workers, pin_memory=True)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=workers, pin_memory=True)
     return train_loader, test_loader
