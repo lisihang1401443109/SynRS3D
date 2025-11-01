@@ -40,7 +40,12 @@ def evaluate_miou(model, loader, device, num_classes):
     for images, masks in loader:
         images = images.to(device)
         if masks.dim() == 4:
-            masks = masks.argmax(dim=1)
+            if masks.shape[1] == num_classes:
+                masks = masks.argmax(dim=1)
+            elif masks.shape[-1] == num_classes:
+                masks = masks.argmax(dim=-1)
+            else:
+                raise RuntimeError(f"Unexpected mask shape {tuple(masks.shape)}; cannot infer class dimension")
         masks = masks.to(device)
         outputs = model(images)["out"]
         preds = outputs.argmax(dim=1)
@@ -70,7 +75,12 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
         for images, masks in train_loader:
             images = images.to(device)
             if masks.dim() == 4:
-                masks = masks.argmax(dim=1)
+                if masks.shape[1] == num_classes:
+                    masks = masks.argmax(dim=1)
+                elif masks.shape[-1] == num_classes:
+                    masks = masks.argmax(dim=-1)
+                else:
+                    raise RuntimeError(f"Unexpected mask shape {tuple(masks.shape)}; cannot infer class dimension")
             masks = masks.to(device)
             outputs = model(images)["out"]
             loss = criterion(outputs, masks)

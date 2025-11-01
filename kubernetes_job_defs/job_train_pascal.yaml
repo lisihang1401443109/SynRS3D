@@ -37,8 +37,8 @@ spec:
 
               POLICY_JSON_PATH=${POLICY_JSON_PATH:-""}
               DATA_ROOT=${DATA_ROOT:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data"}
-              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/outputs/pascal"}
-              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/runs/pascal"}
+              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/outputs/pascal"}
+              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/runs/pascal"}
 
               mkdir -p "$OUT_DIR" "$LOG_DIR"
 
