@@ -12,8 +12,8 @@ from torch.utils.data import DataLoader
 import torchvision
 from torch.utils.tensorboard import SummaryWriter
 
-from autoalbument.pascal_voc.dataset import PascalVOCTrainDataset, PascalVOCSearchDataset, VOC_CLASSES
-from autoalbument.pascal_voc.transforms import (
+from dataset import PascalVOCTrainDataset, PascalVOCSearchDataset, VOC_CLASSES
+from transforms import (
     get_base_train_transforms,
     get_policy_train_transforms,
     get_test_transforms,
@@ -61,6 +61,8 @@ def evaluate_miou(model, loader, device, num_classes):
     return miou
 
 
+from tqdm import tqdm
+
 def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay, num_classes, writer, save_best_path):
     model.to(device)
     criterion = nn.CrossEntropyLoss()
@@ -72,7 +74,7 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
         model.train()
         running_loss = 0.0
         total_batches = 0
-        for images, masks in train_loader:
+        for images, masks in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch", leave=False):
             images = images.to(device)
             if masks.dim() == 4:
                 if masks.shape[1] == num_classes:
@@ -152,9 +154,11 @@ def main():
 
     if not args.only_policy:
         base_tfms = get_base_train_transforms(size=args.size)
+        print(base_tfms)
         base_train_loader, base_val_loader = build_loaders(
             args.data_root, args.batch_size, args.workers, base_tfms, test_tfms, args.download
         )
+        print(base_train_loader)
         base_model = build_model(num_classes=num_classes, pretrained=args.pretrained)
         base_best = train_one(
             base_model,
@@ -172,9 +176,11 @@ def main():
 
     if args.policy_json and os.path.isfile(args.policy_json):
         policy_tfms = get_policy_train_transforms(args.policy_json, size=args.size)
+        print(policy_tfms)
         pol_train_loader, pol_val_loader = build_loaders(
             args.data_root, args.batch_size, args.workers, policy_tfms, test_tfms, args.download
         )
+        print(pol_train_loader)
         pol_model = build_model(num_classes=num_classes, pretrained=args.pretrained)
         pol_best = train_one(
             pol_model,

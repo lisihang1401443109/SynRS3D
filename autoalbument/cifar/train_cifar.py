@@ -44,6 +44,7 @@ def evaluate(model, loader, device):
         total += labels.size(0)
     return correct / total if total > 0 else 0.0
 
+from tqdm import tqdm
 
 def train_one(model, train_loader, test_loader, device, epochs, lr, weight_decay, writer, save_best_path):
     model.to(device)
@@ -55,7 +56,7 @@ def train_one(model, train_loader, test_loader, device, epochs, lr, weight_decay
         model.train()
         running_loss = 0.0
         total_batches = 0
-        for images, labels in train_loader:
+        for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch", leave=False):
             images = images.to(device)
             labels = labels.to(device)
             outputs = model(images)
@@ -115,9 +116,11 @@ def main():
 
     if not args.only_policy:
         base_tfms = get_base_train_transforms()
+        print(base_tfms)
         base_train_loader, base_test_loader = build_loaders(
             args.data_root, args.batch_size, args.workers, base_tfms, test_tfms, args.download
         )
+        print(base_train_loader)
         base_model = wide_resnet_28x10(num_classes=10)
         base_best = train_one(
             base_model,
@@ -134,9 +137,11 @@ def main():
 
     if args.policy_json and os.path.isfile(args.policy_json):
         policy_tfms = get_policy_train_transforms(args.policy_json)
+        print(policy_tfms)
         pol_train_loader, pol_test_loader = build_loaders(
             args.data_root, args.batch_size, args.workers, policy_tfms, test_tfms, args.download
         )
+        print(pol_train_loader)
         pol_model = wide_resnet_28x10(num_classes=10)
         pol_best = train_one(
             pol_model,
