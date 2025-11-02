@@ -36,15 +36,16 @@ spec:
               cd /mnt/synrs3d/SynRS3D
 
               POLICY_JSON_PATH=${POLICY_JSON_PATH:-""}
-              DATA_ROOT=${DATA_ROOT:-"/mnt/synrs3d/SynRS3D/autoalbument/data/cifar10"}
-              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/outputs/cifar"}
-              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/runs/cifar"}
+              DATA_ROOT=${DATA_ROOT:-"/mnt/synrs3d/SynRS3D/autoalbument/cifar/data"}
+              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/cifar/outputs/"}
+              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/cifar/runs/"}
 
-              git pull 
+              # git pull 
 
               mkdir -p "$OUT_DIR" "$LOG_DIR"
 
               PYTHONPATH=/mnt/synrs3d/SynRS3D:$PYTHONPATH \
+              nvidia-smi
               python autoalbument/cifar/train_cifar.py \
                 --data_root "$DATA_ROOT" \
                 --epochs ${EPOCHS:-100} \

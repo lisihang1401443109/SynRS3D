@@ -11,9 +11,9 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from autoalbument.cifar.dataset import Cifar10TrainDataset
-from autoalbument.cifar.wrn import wide_resnet_28x10
-from autoalbument.cifar.transforms import (
+from dataset import Cifar10TrainDataset
+from wrn import wide_resnet_28x10
+from transforms import (
     get_base_train_transforms,
     get_policy_train_transforms,
     get_test_transforms,
@@ -80,7 +80,7 @@ def train_one(model, train_loader, test_loader, device, epochs, lr, weight_decay
 
 def build_loaders(root, batch_size, workers, train_tfms, test_tfms, download):
     train_set = Cifar10TrainDataset(root=root, train=True, download=download, transform=train_tfms)
-    test_set = Cifar10TrainDataset(root=root, train=False, download=download, transform=test_tfms)
+    test_set = Cifar10TrainDataset(root=root, train=False, download=download, transform=test_tfms) 
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=workers, pin_memory=True)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=workers, pin_memory=True)
     return train_loader, test_loader
