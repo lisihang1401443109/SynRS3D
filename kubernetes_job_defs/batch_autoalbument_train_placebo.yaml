@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-train-50k-job-only-brightness
+  name: sihang-autoalbument-train-50k-job-placebo
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-train-50k-job-only-brightness
+    job-name: sihang-autoalbument-train-50k-job-placebo
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-train-50k-job-only-brightness
+        job-name: sihang-autoalbument-train-50k-job-placebo
     spec:
       restartPolicy: Never
       containers:
@@ -72,9 +72,8 @@ spec:
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh \
-                autoalbument/policies/only_brightness.json \
-                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_only_brightness
-              # /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-19/05-22-04/policy/latest.json
+                autoalbument/policies/placebo_policy.json \
+                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_placebo
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
