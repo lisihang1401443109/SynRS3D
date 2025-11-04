@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-train-50k-job-only-placebo
+  name: sihang-autoalbument-train-50k-job-placebo
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-train-50k-job-only-placebo
+    job-name: sihang-autoalbument-train-50k-job-placebo
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-train-50k-job-only- placebo
+        job-name: sihang-autoalbument-train-50k-job-placebo
     spec:
       restartPolicy: Never
       containers:
@@ -62,7 +62,7 @@ spec:
               
               # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
               # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
-              cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
+              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
 
               
               # Print the version of autoalbument
@@ -73,7 +73,7 @@ spec:
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh \
                 autoalbument/policies/placebo_policy.json \
-                ${SNAPSHOT_DIR:-/mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_placebo}
+                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_placebo
               # /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-19/05-22-04/policy/latest.json
               
               # Optional: Run evaluation after training completes

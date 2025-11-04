@@ -30,6 +30,7 @@ spec:
               conda install gdal -y
               python -m pip install albumentations==2.0.5 tensorboard
               python -m pip install autoalbument==1.4.18
+              pip install tqdm
 
               echo "Deps installed"
 

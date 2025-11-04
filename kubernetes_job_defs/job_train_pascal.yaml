@@ -30,6 +30,7 @@ spec:
               conda install gdal -y
               python -m pip install albumentations==2.0.5 tensorboard
               python -m pip install autoalbument
+              pip install tqdm
 
               echo "Deps installed"
 
@@ -37,12 +38,13 @@ spec:
 
               POLICY_JSON_PATH=${POLICY_JSON_PATH:-""}
               DATA_ROOT=${DATA_ROOT:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/data"}
-              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/cifar/outputs/pascal"}
-              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/cifar/runs/pascal"}
+              OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/outputs/"}
+              LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/runs/"}
 
               mkdir -p "$OUT_DIR" "$LOG_DIR"
 
               # git pull
+              # SynRS3D/autoalbument/pascal_voc/train_pascal.py
 
               PYTHONPATH=/mnt/synrs3d/SynRS3D:$PYTHONPATH \
               nvidia-smi
