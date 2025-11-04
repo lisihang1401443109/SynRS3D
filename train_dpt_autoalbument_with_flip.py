@@ -31,6 +31,7 @@ from models.dpt import DPT_DINOv2
 from torch.utils.tensorboard import SummaryWriter
 from albumentations import Compose, RandomCrop, HorizontalFlip, VerticalFlip, RandomRotate90, Normalize, OneOf, CenterCrop, GaussianBlur
 from albumentations.pytorch import ToTensorV2
+import albumentations as A
                 
 def get_arguments():
     """Parse all the arguments provided from the CLI.
@@ -103,12 +104,41 @@ def get_arguments():
     # gaussian blur
     parser.add_argument("--gaussian_p", type=float, default=0.0, 
                        help="probability of applying gaussian blur (0.0 means no blur, 1.0 means always apply)")
-    parser.add_argument("--gaussian_s", type=float, default=1.0, 
-                       help="sigma of gaussian blur, scaled to the range (0.5, 2)")
     parser.add_argument("--style_aug_p", type=float, default=0.0, 
                        help="probability of applying style augmentation")
+    
+    
+        # AutoAlbument specific arguments
+    parser.add_argument("--policy_path", type=str, 
+                       default='/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json',
+                       help="Path to the AutoAlbument policy JSON file.")
 
     return parser.parse_args()
+
+
+def get_autoalbument_transforms(policy_path, crop_size=392):
+    """Load and configure AutoAlbument policy.
+    
+    Args:
+        policy_path: Path to the AutoAlbument policy JSON file
+        crop_size: Size for random crop
+        
+    Returns:
+        A composed Albumentations transform
+    """
+    # Load the AutoAlbument policy
+    policy = A.load(policy_path, data_format='json')
+    # print the policy
+    print(policy)
+    
+    # Create a list of transforms
+    transforms = [
+        A.RandomCrop(crop_size, crop_size, always_apply=True),
+        policy,
+        # ToTensorV2()
+    ]
+    
+    return A.Compose(transforms)
     
 def main():
     args = get_arguments()
@@ -126,6 +156,8 @@ def main():
 
     # Datasets
     datasets = '_'.join(args.datasets)
+    
+    train_transforms = get_autoalbument_transforms(args.policy_path, args.crop_size)
     
     # Add multi-task or single-task specific paths
     multi_suffixes = []
@@ -220,20 +252,21 @@ def main():
                     'PDA': {'blend_ratio': args.PDA_blend_ratio, 'transform_type': args.PDA_type}}
     
 
-    transforms_list = [
-    RandomCrop(args.crop_size, args.crop_size),
-    OneOf([
-        HorizontalFlip(True),
-        VerticalFlip(True),
-        RandomRotate90(True)
-    ], p=0.75),
-    ]
-    if args.gaussian_p > 0:
-        transforms_list.append(GaussianBlur(sigma_limit=(0.5*args.gaussian_s, 2*args.gaussian_s), p=args.gaussian_p))
-    transforms_list.append(Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True))
-    transforms_list.append(ToTensorV2())
+    # transforms_list = [
+    # RandomCrop(args.crop_size, args.crop_size),
+    # OneOf([
+    #     HorizontalFlip(True),
+    #     VerticalFlip(True),
+    #     RandomRotate90(True)
+    # ], p=0.75),
+    # ]
+    # if args.gaussian_p > 0:
+    #     transforms_list.append(GaussianBlur(blur_limit=(3, 7), p=args.gaussian_p))
+    # transforms_list.append(Normalize(mean=(123.675, 116.28, 103.53), std=(58.395, 57.12, 57.375), max_pixel_value=1, always_apply=True))
+    # transforms_list.append(ToTensorV2())
     
-    traning_src_transforms = Compose(transforms_list)
+    # traning_src_transforms = Compose(transforms_list)
+    training_src_transforms = train_transforms
         
     tgt_data_path = [os.path.join(args.root_dir, dataset) for dataset in args.tgt_datasets]
         
@@ -246,7 +279,7 @@ def main():
     syn_traindataset = MultiTaskDataSet(syn_train_data_path, 
                                 is_training=True, 
                                 images_file=args.images_file,
-                                transforms=traning_src_transforms,
+                                transforms=training_src_transforms,
                                 max_iters=args.num_steps * args.batch_size,
                                 max_da_images=args.max_da_images,
                                 multi_task=args.multi_task,
@@ -258,7 +291,7 @@ def main():
                                 #! stylization
                                 stylized_p = args.stylized_p
                                 )
-    syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
+    syn_trainloader = data.DataLoader(syn_traindataset, batch_size=args.batch_size, shuffle=True, num_workers=8)
 
     test_data_path = [os.path.join(args.root_dir, dataset) for dataset in args.test_datasets]
     testing_transforms = Compose([
@@ -317,6 +350,8 @@ def main():
     optimizer.zero_grad()
     best_metrics = {'HE': float('inf'), 'SS': float('-inf')}
     best_model_paths = {'HE': None, 'SS': None}
+    # print device
+    print(f"Device: {device}")
     
     for i_iter in range(args.start_iters, args.num_steps):
         # training on source
@@ -330,9 +365,16 @@ def main():
 
         # Move tensors to GPU and handle data types
         images, dsms = images.cuda(), dsms.cuda()
+        # if ss_masks is not None:
+        #     ss_masks = ss_masks.squeeze(dim=1).long().cuda()
         if ss_masks is not None:
-            print(ss_masks.shape)
-            ss_masks = ss_masks.squeeze(dim=1).long().cuda()
+            # Ensure the mask is 3D [batch, height, width]
+            if ss_masks.dim() == 4 and ss_masks.size(2) == 1:
+                ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
+            ss_masks = ss_masks.long().cuda()
+        # print mask shape
+        # print(ss_masks.shape)
+        
 
         model.train()
         optimizer.zero_grad()
@@ -363,6 +405,13 @@ def main():
                     
             total_fl_loss *= args.fl_weight
             
+        
+        # move image to device
+        images = images.to(device)
+        # move model to device
+        model.to(device)
+        
+        
         pre_outputs = model(images)
 
         pre_dsms = pre_outputs.get('regression', None)

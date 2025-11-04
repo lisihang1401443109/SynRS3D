@@ -321,7 +321,7 @@ def main():
                                 transforms=testing_transforms,
                                 combine_class=False if not args.combine_class and get_dataset_category(set(['OEM']))==train_dataset_type else True, 
                                 )
-        oemloader = data.DataLoader(oemdataset, batch_size=1, shuffle=False, collate_fn=custom_collate)#! modified
+        oemloader = data.DataLoader(oemdataset, batch_size=32, shuffle=False, collate_fn=custom_collate)#! modified
         oemloaders['OEM']=oemloader
 
     encoder_modules = set(model.pretrained.parameters())
@@ -368,6 +368,7 @@ def main():
         # if ss_masks is not None:
         #     ss_masks = ss_masks.squeeze(dim=1).long().cuda()
         if ss_masks is not None:
+            print(ss_masks.shape)
             # Ensure the mask is 3D [batch, height, width]
             if ss_masks.dim() == 4 and ss_masks.size(2) == 1:
                 ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
