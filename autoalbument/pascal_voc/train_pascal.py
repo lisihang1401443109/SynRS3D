@@ -136,7 +136,7 @@ def main():
     parser.add_argument("--download", action="store_true")
     parser.add_argument("--only_policy", action="store_true")
     parser.add_argument("--pretrained", action="store_true")
-    parser.add_argument("--size", type=int, default=320)
+    parser.add_argument("--size", type=int, default=256)
     parser.add_argument("--output_dir", type=str, default=str(Path("./outputs/pascal").resolve()))
     parser.add_argument("--log_dir", type=str, default=str(Path("./runs/pascal").resolve()))
     args = parser.parse_args()
