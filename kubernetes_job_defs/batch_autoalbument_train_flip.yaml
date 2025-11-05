@@ -79,7 +79,7 @@ spec:
 
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
-              bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k_flip.sh \
+              bash so_autoalbument_50k_flip.sh \
                 autoalbument/policies/only_brightness.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_only_brightness_flip
               
