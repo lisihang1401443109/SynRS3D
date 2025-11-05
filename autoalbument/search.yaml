@@ -187,7 +187,7 @@ hydra:
 trainer:
   # Configuration for PyTorch Lightning Trainer. You can read more about Trainer and its arguments at
   # https://pytorch-lightning.readthedocs.io/en/stable/common/trainer.html.
-  max_epochs: 100
+  max_epochs: 500
   # Number of epochs to search for augmentation parameters.
   # More detailed description - https://pytorch-lightning.readthedocs.io/en/stable/common/trainer.html#max-epochs
 

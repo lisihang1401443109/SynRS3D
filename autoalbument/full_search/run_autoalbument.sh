@@ -28,9 +28,9 @@ log "Output directory: $OUTPUT_DIR"
 log "Log file: $LOG_FILE"
 
 # Run AutoAlbument search
-log "Running: autoalbument-search --config-dir /mnt/synrs3d/SynRS3D/autoalbument"
+log "Running: autoalbument-search --config-dir /mnt/synrs3d/SynRS3D/autoalbument/full_search"
 
 conda activate autoalbument
 
 autoalbument-search \
-    --config-dir /mnt/synrs3d/SynRS3D/autoalbument
+    --config-dir /mnt/synrs3d/SynRS3D/autoalbument/full_search

@@ -49,11 +49,19 @@ spec:
               echo "Dependencies installed"
 
               # Replace the albumentations transform file
-              rm /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py
-              cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
+              # rm /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py
+              # cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
 
               # Navigate to SynRS3D directory
-              cd /mnt/synrs3d/SynRS3D
+              # cd /mnt/synrs3d/SynRS3D
+              cd ~
+
+              git clone https://github.com/lisihang1401443109/SynRS3D.git
+              cd SynRS3D
+              
+              rm -rf ./data
+              ln -s /mnt/synrs3d/SynRS3D/data ./data
+
 
               # Make sure we have the latest code
               # git fetch --all
@@ -74,7 +82,6 @@ spec:
               bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k_flip.sh \
                 autoalbument/policies/only_brightness.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_only_brightness_flip
-              # /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-19/05-22-04/policy/latest.json
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
