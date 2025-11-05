@@ -371,6 +371,8 @@ def main():
             # Ensure the mask is 3D [batch, height, width]
             if ss_masks.dim() == 4 and ss_masks.size(2) == 1:
                 ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
+                # flip height and width
+                ss_masks = ss_masks.permute(0, 2, 1)
             ss_masks = ss_masks.long().cuda()
         # print mask shape
         # print(ss_masks.shape)

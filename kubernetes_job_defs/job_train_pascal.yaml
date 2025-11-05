@@ -55,7 +55,7 @@ spec:
                 --workers ${WORKERS:-4} \
                 --lr ${LR:-0.01} \
                 --weight_decay ${WEIGHT_DECAY:-1e-4} \
-                --size ${SIZE:-320} \
+                --size ${SIZE:-256} \
                 --pretrained \
                 --output_dir "$OUT_DIR" \
                 --log_dir "$LOG_DIR" \
