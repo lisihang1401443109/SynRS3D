@@ -60,6 +60,9 @@ python -c "import torch; print(f'PyTorch version: {torch.__version__}')"
 python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 python -c "import autoalbument; print(f'AutoAlbument version: {autoalbument.__version__}')"
 
+# print albumantation version
+python -c "import albumentations; print(f'Albumantation version: {albumentations.__version__}')"
+
 echo -e "\n${GREEN}Installation complete!${NC}"
 echo -e "To activate the environment, run: ${YELLOW}conda activate ${ENV_NAME}${NC}"
 echo -e "To run the search, execute: ${YELLOW}./run_autoalbument.sh${NC}"
