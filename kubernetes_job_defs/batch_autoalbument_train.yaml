@@ -49,29 +49,34 @@ spec:
               echo "Dependencies installed"
 
               # Replace the albumentations transform file
-              rm /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py
-              cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
+              # rm /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/transforms.py
+              # cp /mnt/synrs3d/swap_env_files/transforms.py /opt/conda/envs/synrs3d/lib/python3.11/site-packages/albumentations/pytorch/
 
               # Navigate to SynRS3D directory
-              cd /mnt/synrs3d/SynRS3D
+              # cd /mnt/synrs3d/SynRS3D
+              cd ~
+
+              git clone https://github.com/lisihang1401443109/SynRS3D.git
+              cd SynRS3D
+              
+              rm -rf ./data
+              ln -s /mnt/synrs3d/SynRS3D/data ./data
+
 
               # Make sure we have the latest code
               # git fetch --all
               git checkout gaussian-baselines
               git pull
               
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
 
               
               # Print the version of autoalbument
-              python -c "import autoalbument; print(autoalbument.__version__)"
+              # python -c "import autoalbument; print(autoalbument.__version__)"
 
 
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
-              bash /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh \
+              bash so_autoalbument_50k.sh \
                 autoalbument/policies/only_brightness.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_only_brightness
               # /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-19/05-22-04/policy/latest.json

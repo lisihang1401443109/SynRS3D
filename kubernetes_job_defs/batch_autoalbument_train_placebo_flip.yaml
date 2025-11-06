@@ -70,8 +70,6 @@ spec:
               
 
               
-              # Print the version of autoalbument
-              python -c "import autoalbument; print(autoalbument.__version__)"
 
 
               # Make the script executable and run it

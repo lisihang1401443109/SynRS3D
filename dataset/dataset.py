@@ -56,7 +56,8 @@ class MultiTaskDataSet(data.Dataset):
                     if len(tgt_img_ids_in_dir) > self.max_da_images:
                         tgt_img_ids_in_dir = tgt_img_ids_in_dir[:self.max_da_images]
                         
-                    opt_dir = "opt_orig" if (os.path.basename(dir).startswith("grid_") or os.path.basename(dir).startswith("terrain_")) and os.path.exists(os.path.join(dir, "opt_orig")) else "opt"
+                    # opt_dir = "opt_orig" if (os.path.basename(dir).startswith("grid_") or os.path.basename(dir).startswith("terrain_")) and os.path.exists(os.path.join(dir, "opt_orig")) else "opt"
+                    opt_dir = "opt"
                     self.tgt_files_path.extend(os.path.join(dir, f"{opt_dir}/{name}.tif") for name in tgt_img_ids_in_dir)
                     
         self.list_path = [os.path.join(data, self.train_file if self.is_training else self.test_file) for data in self.root]
@@ -85,7 +86,8 @@ class MultiTaskDataSet(data.Dataset):
                                         'name': name} for name in img_ids_in_dir])
                 else:
                     #? original
-                    opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt"
+                    # opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt" 
+                    opt_dir = "opt"
                     if self.multi_task:
                         self.files.extend([{'img': os.path.join(root_dir, f"{opt_dir}/{name}.tif"),
                                             'dsm': os.path.join(root_dir, f"gt_nDSM/{name}.tif"),
@@ -222,7 +224,8 @@ class PesudoDataSet(data.Dataset):
                 if len(img_ids_in_dir) > self.max_da_images:
                     img_ids_in_dir = img_ids_in_dir[:self.max_da_images]
                 self.img_ids.extend(img_ids_in_dir)
-                opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt"
+                # opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt"
+                opt_dir = "opt"
                 self.files.extend([{'img': os.path.join(root_dir, f"{opt_dir}/{name}.tif"),
                                     'name': name} for name in img_ids_in_dir])
         random.shuffle(self.files)
@@ -306,7 +309,8 @@ class OEMDataSet(data.Dataset):
                 img_ids_in_dir = [line.strip() for line in file]
                 self.img_ids.extend(img_ids_in_dir)
                 #! The line below caused a issue because the train.txt is stored in the format xxx.tif
-                opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt"
+                # opt_dir = "opt_orig" if (os.path.basename(root_dir).startswith("grid_") or os.path.basename(root_dir).startswith("terrain_")) and os.path.exists(os.path.join(root_dir, "opt_orig")) else "opt"
+                opt_dir = "opt"
                 self.files.extend([{'img': os.path.join(root_dir, f"{opt_dir}/{name}"),
                                     'ss_mask': os.path.join(root_dir, f"gt_ss_mask/{name}"),
                                     'name': name} for name in img_ids_in_dir])

@@ -73,8 +73,6 @@ spec:
               # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
 
               
-              # Print the version of autoalbument
-              python -c "import autoalbument; print(autoalbument.__version__)"
 
 
               # Make the script executable and run it
