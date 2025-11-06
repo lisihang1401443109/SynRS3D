@@ -18,7 +18,7 @@ class AutoAlbumentDataset(Dataset):
     def __init__(
         self,
         root: str,
-        image_dir: str = "opt_orig",
+        image_dir: str = "opt",
         mask_dir: str = "gt_ss_mask",
         split_file: str = "train.txt",
         transform: Optional[Any] = None,
@@ -94,7 +94,7 @@ class AutoAlbumentDataset(Dataset):
 
 def get_dataset(
     data_dir: str,
-    image_dir: str = "opt_orig",
+    image_dir: str = "opt",
     mask_dir: str = "gt_ss_mask",
     split: str = "train",
     transform: Optional[Any] = None,
