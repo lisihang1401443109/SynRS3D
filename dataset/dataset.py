@@ -285,7 +285,8 @@ class OEMDataSet(data.Dataset):
             for dir in tgt_root_dir:
                 with open(os.path.join(dir, self.tgt_file), 'r') as file:
                     tgt_img_ids_in_dir = [line.strip() for line in file]
-                    opt_dir = "opt_orig" if (os.path.basename(dir).startswith("grid_") or os.path.basename(dir).startswith("terrain_")) and os.path.exists(os.path.join(dir, "opt_orig")) else "opt"
+                    # opt_dir = "opt_orig" if (os.path.basename(dir).startswith("grid_") or os.path.basename(dir).startswith("terrain_")) and os.path.exists(os.path.join(dir, "opt_orig")) else "opt"
+                    opt_dir = "opt"
                     self.tgt_files_path.extend(os.path.join(dir, f"{opt_dir}/{name}.tif") for name in tgt_img_ids_in_dir)
 
         self.list_path = [os.path.join(data, self.train_file if self.is_training else self.test_file) for data in self.root]
