@@ -5,7 +5,8 @@ from albumentations.pytorch import ToTensorV2
 def get_base_train_transforms(size=320, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)):
     return A.Compose(
         [
-            A.RandomCrop(size, size, always_apply=True),
+            # A.RandomCrop(size, size, always_apply=True),
+            A.Resize(size, size, always_apply=True),
             A.Normalize(mean=mean, std=std),
             ToTensorV2(),
         ]
