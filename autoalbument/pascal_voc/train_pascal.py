@@ -35,29 +35,63 @@ print(f"Using device: {device}")
 @torch.no_grad()
 def evaluate_miou(model, loader, device, num_classes):
     model.eval()
-    ious = torch.zeros(num_classes, dtype=torch.float64)
-    unions = torch.zeros(num_classes, dtype=torch.float64)
-    for images, masks in loader:
-        images = images.to(device)
-        if masks.dim() == 4:
-            if masks.shape[1] == num_classes:
-                masks = masks.argmax(dim=1)
-            elif masks.shape[-1] == num_classes:
-                masks = masks.argmax(dim=-1)
-            else:
-                raise RuntimeError(f"Unexpected mask shape {tuple(masks.shape)}; cannot infer class dimension")
-        masks = masks.to(device)
-        outputs = model(images)["out"]
-        preds = outputs.argmax(dim=1)
-        for cls in range(num_classes):
-            pred_c = preds == cls
-            mask_c = masks == cls
-            inter = (pred_c & mask_c).sum().double()
-            union = (pred_c | mask_c).sum().double()
-            ious[cls] += inter
-            unions[cls] += union
+    ious = torch.zeros(num_classes, dtype=torch.float64, device=device)
+    unions = torch.zeros(num_classes, dtype=torch.float64, device=device)
+    
+    for batch_idx, batch in enumerate(loader):
+        try:
+            if len(batch) != 2:
+                print(f"Unexpected batch format. Expected length 2, got {len(batch)}. Batch: {batch}")
+                continue
+                
+            images, masks = batch
+            if not isinstance(images, torch.Tensor) or not isinstance(masks, torch.Tensor):
+                print(f"Unexpected data types. Images type: {type(images)}, Masks type: {type(masks)}")
+                continue
+                
+            images = images.to(device)
+            
+            # Convert mask to proper format
+            if masks.dim() == 4:  # Should be (B, C, H, W) or (B, H, W, C)
+                if masks.shape[1] == num_classes:  # (B, C, H, W)
+                    masks = masks.argmax(dim=1)
+                elif masks.shape[-1] == num_classes:  # (B, H, W, C)
+                    masks = masks.permute(0, 3, 1, 2).argmax(dim=1)
+                else:
+                    print(f"Unexpected mask shape {tuple(masks.shape)}; expected channels to be {num_classes}")
+                    continue
+            elif masks.dim() != 3:  # Should be (B, H, W) after processing
+                print(f"Unexpected mask dimensions: {masks.dim()}, shape: {tuple(masks.shape)}")
+                continue
+                
+            masks = masks.long().to(device)
+            
+            # Forward pass
+            outputs = model(images)["out"]
+            preds = outputs.argmax(dim=1)
+            
+            # Calculate IoU for each class
+            for cls in range(num_classes):
+                pred_c = preds == cls
+                mask_c = masks == cls
+                inter = (pred_c & mask_c).sum().double()
+                union = (pred_c | mask_c).sum().double()
+                ious[cls] += inter
+                unions[cls] += union
+                
+        except Exception as e:
+            print(f"Error processing batch {batch_idx}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            continue
+    
+    # Calculate mean IoU
     valid = unions > 0
-    miou = (ious[valid] / unions[valid]).mean().item() if valid.any() else 0.0
+    if not valid.any():
+        print("Warning: No valid classes found in validation set")
+        return 0.0
+        
+    miou = (ious[valid] / unions[valid]).mean().item()
     return miou
 
 
@@ -70,37 +104,71 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
     optimizer = optim.SGD(params, lr=lr, momentum=0.9, weight_decay=weight_decay, nesterov=True)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
     best_miou = 0.0
+    
     for epoch in range(epochs):
         model.train()
         running_loss = 0.0
         total_batches = 0
-        for images, masks in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch", leave=False):
-            images = images.to(device)
-            if masks.dim() == 4:
-                if masks.shape[1] == num_classes:
-                    masks = masks.argmax(dim=1)
-                elif masks.shape[-1] == num_classes:
-                    masks = masks.argmax(dim=-1)
-                else:
-                    raise RuntimeError(f"Unexpected mask shape {tuple(masks.shape)}; cannot infer class dimension")
-            masks = masks.to(device)
-            outputs = model(images)["out"]
-            loss = criterion(outputs, masks)
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            running_loss += loss.item()
-            total_batches += 1
+        
+        with tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch", leave=False) as t:
+            for batch_idx, (images, masks) in enumerate(t):
+                try:
+                    # Move images to device
+                    images = images.to(device)
+                    
+                    # Convert mask to proper format
+                    if masks.dim() == 4:  # (B, C, H, W) or (B, H, W, C)
+                        if masks.shape[1] == num_classes:  # (B, C, H, W)
+                            masks = masks.argmax(dim=1)
+                        elif masks.shape[-1] == num_classes:  # (B, H, W, C)
+                            masks = masks.permute(0, 3, 1, 2).argmax(dim=1)
+                        else:
+                            print(f"Unexpected mask shape {tuple(masks.shape)} in training batch {batch_idx}")
+                            continue
+                    
+                    masks = masks.long().to(device)
+                    
+                    # Forward pass
+                    outputs = model(images)["out"]
+                    loss = criterion(outputs, masks)
+                    
+                    # Backward pass and optimize
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+                    
+                    # Update statistics
+                    running_loss += loss.item()
+                    total_batches += 1
+                    
+                    # Update progress bar
+                    t.set_postfix(loss=loss.item())
+                    
+                except Exception as e:
+                    print(f"Error in training batch {batch_idx}: {str(e)}")
+                    continue
+        
+        # Step the learning rate scheduler
         scheduler.step()
+        
+        # Evaluate on validation set
         miou = evaluate_miou(model, val_loader, device, num_classes)
+        
+        # Log metrics
         if writer is not None:
             if total_batches > 0:
-                writer.add_scalar("train/loss", running_loss / total_batches, epoch)
+                avg_loss = running_loss / total_batches
+                writer.add_scalar("train/loss", avg_loss, epoch)
+                print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}, mIoU: {miou:.4f}")
             writer.add_scalar("val/miou", miou, epoch)
+        
+        # Save best model
         if miou > best_miou:
             best_miou = miou
             if save_best_path:
                 torch.save({"model": model.state_dict(), "best_miou": best_miou}, save_best_path)
+                print(f"New best model saved with mIoU: {best_miou:.4f}")
+    
     return best_miou
 
 
