@@ -97,86 +97,40 @@ def evaluate_miou(model, loader, device, num_classes):
 
 from tqdm import tqdm
 
-def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay, num_classes, writer, save_best_path):
-    model.to(device)
-    criterion = nn.CrossEntropyLoss()
-    params = [p for p in model.parameters() if p.requires_grad]
-    optimizer = optim.SGD(params, lr=lr, momentum=0.9, weight_decay=weight_decay, nesterov=True)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
-    best_miou = 0.0
-    
-    for epoch in range(epochs):
-        model.train()
-        running_loss = 0.0
-        total_batches = 0
-        
-        with tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}", unit="batch", leave=False) as t:
-            for batch_idx, (images, masks) in enumerate(t):
-                try:
-                    # Move images to device
-                    images = images.to(device)
-                    
-                    # Convert mask to proper format
-                    if masks.dim() == 4:  # (B, C, H, W) or (B, H, W, C)
-                        if masks.shape[1] == num_classes:  # (B, C, H, W)
-                            masks = masks.argmax(dim=1)
-                        elif masks.shape[-1] == num_classes:  # (B, H, W, C)
-                            masks = masks.permute(0, 3, 1, 2).argmax(dim=1)
-                        else:
-                            print(f"Unexpected mask shape {tuple(masks.shape)} in training batch {batch_idx}")
-                            continue
-                    
-                    masks = masks.long().to(device)
-                    
-                    # Forward pass
-                    outputs = model(images)["out"]
-                    loss = criterion(outputs, masks)
-                    
-                    # Backward pass and optimize
-                    optimizer.zero_grad()
-                    loss.backward()
-                    optimizer.step()
-                    
-                    # Update statistics
-                    running_loss += loss.item()
-                    total_batches += 1
-                    
-                    # Update progress bar
-                    t.set_postfix(loss=loss.item())
-                    
-                except Exception as e:
-                    print(f"Error in training batch {batch_idx}: {str(e)}")
-                    continue
-        
-        # Step the learning rate scheduler
-        scheduler.step()
-        
-        # Evaluate on validation set
-        miou = evaluate_miou(model, val_loader, device, num_classes)
-        
-        # Log metrics
-        if writer is not None:
-            if total_batches > 0:
-                avg_loss = running_loss / total_batches
-                writer.add_scalar("train/loss", avg_loss, epoch)
-                print(f"Epoch {epoch+1}/{epochs} - Loss: {avg_loss:.4f}, mIoU: {miou:.4f}")
-            writer.add_scalar("val/miou", miou, epoch)
-        
-        # Save best model
-        if miou > best_miou:
-            best_miou = miou
-            if save_best_path:
-                torch.save({"model": model.state_dict(), "best_miou": best_miou}, save_best_path)
-                print(f"New best model saved with mIoU: {best_miou:.4f}")
-    
-    return best_miou
-
 
 def build_loaders(root, batch_size, workers, train_tfms, test_tfms, download):
+    print("Building data loaders...")
+    print(f"Train transforms: {train_tfms}")
+    print(f"Test transforms: {test_tfms}")
+    
+    # Create datasets
     train_set = PascalVOCTrainDataset(root=root, image_set="train", download=download, transform=train_tfms)
     val_set = PascalVOCTrainDataset(root=root, image_set="val", download=download, transform=test_tfms)
-    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=workers, pin_memory=True)
-    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=workers, pin_memory=True)
+    
+    print(f"Training samples: {len(train_set)}")
+    print(f"Validation samples: {len(val_set)}")
+    
+    # Create data loaders with error handling
+    train_loader = DataLoader(
+        train_set,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=min(4, workers),  # Limit workers to avoid issues
+        pin_memory=True,
+        drop_last=True,  # Drop last incomplete batch
+        persistent_workers=workers > 0  # Keep workers alive between epochs
+    )
+    
+    val_loader = DataLoader(
+        val_set,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=min(2, workers),  # Use fewer workers for validation
+        pin_memory=True,
+        drop_last=False,  # Don't drop last batch in validation
+        persistent_workers=workers > 0
+    )
+    
     return train_loader, val_loader
 
 
