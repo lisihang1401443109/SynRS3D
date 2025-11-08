@@ -133,7 +133,7 @@ def get_autoalbument_transforms(policy_path, crop_size=392):
     
     # Create a list of transforms
     transforms = [
-        A.RandomCrop(crop_size, crop_size, always_apply=True),
+        A.RandomCrop(crop_size, crop_size),
         policy,
         # ToTensorV2()
     ]
@@ -368,7 +368,7 @@ def main():
         # if ss_masks is not None:
         #     ss_masks = ss_masks.squeeze(dim=1).long().cuda()
         if ss_masks is not None:
-            print(ss_masks.shape)
+            # print(ss_masks.shape)
             # Ensure the mask is 3D [batch, height, width]
             if ss_masks.dim() == 4 and ss_masks.size(2) == 1:
                 ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
