@@ -373,6 +373,7 @@ def main():
             #     ss_masks = ss_masks.squeeze(2)  # Remove channel dimension if it's 1
             #     # flip height and width
             #     ss_masks = ss_masks.permute(0, 2, 1)
+            # ss_masks = ss_masks.permute(1, 2, 0)
             ss_masks = ss_masks.permute(0, 2, 3, 1)
             ss_masks = ss_masks.long().cuda()
         # print mask shape
