@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
+  name: sihang-autoalbument-train-50k-job-full-fix-mask-shape
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
+    job-name: sihang-autoalbument-train-50k-job-full-fix-mask-shape
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
+        job-name: sihang-autoalbument-train-50k-job-full-fix-mask-shape
     spec:
       affinity:
         nodeAffinity:
@@ -77,9 +77,6 @@ spec:
               git checkout gaussian-baselines
               git pull
               
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-05/17-13-57/policy
-              # cat /mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-10-11/09-00-57/policy/epoch_50.json
 
               
 
@@ -87,8 +84,8 @@ spec:
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash so_autoalbument_50k_fix_mask_shape.sh \
-                autoalbument/policies/only_brightness.json \
-                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_only_brightness_fix_mask_shape
+                autoalbument/policies/full.json \
+                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_full_fix_mask_shape
               
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
