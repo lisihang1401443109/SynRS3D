@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 import torchvision
@@ -182,35 +183,78 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
 from tqdm import tqdm
 
 
+def custom_collate_fn(batch):
+    """
+    Custom collate function that handles batches with variable-sized tensors.
+    Pads images and masks to the maximum dimensions in the batch.
+    """
+    # Filter out None values
+    batch = [item for item in batch if item is not None]
+    
+    # If batch is empty after filtering, return None
+    if len(batch) == 0:
+        return None, None
+        
+    # Unzip the batch
+    images, masks = zip(*batch)
+    
+    # Find max height and width in the batch
+    max_h = max(img.shape[-2] for img in images)
+    max_w = max(img.shape[-1] for img in images)
+    
+    # Pad images and masks
+    padded_images = []
+    padded_masks = []
+    
+    for img, mask in zip(images, masks):
+        # Get current dimensions
+        c, h, w = img.shape
+        
+        # Calculate padding
+        pad_h = max_h - h
+        pad_w = max_w - w
+        
+        # Pad images and masks
+        if pad_h > 0 or pad_w > 0:
+            # Pad format: (left, right, top, bottom)
+            padding = (0, pad_w, 0, pad_h)
+            img = F.pad(img, padding, mode='constant', value=0)
+            mask = F.pad(mask, padding, mode='constant', value=0)
+        
+        padded_images.append(img)
+        padded_masks.append(mask)
+    
+    # Stack the padded tensors
+    batch_images = torch.stack(padded_images, dim=0)
+    batch_masks = torch.stack(padded_masks, dim=0)
+    
+    return batch_images, batch_masks
+
+
 def build_loaders(root, batch_size, workers, train_tfms, test_tfms, download):
-    print("Building data loaders...")
-    print(f"Train transforms: {train_tfms}")
-    print(f"Test transforms: {test_tfms}")
-    
-    # Create datasets
-    train_set = PascalVOCTrainDataset(root=root, image_set="train", download=download, transform=train_tfms)
-    val_set = PascalVOCTrainDataset(root=root, image_set="val", download=download, transform=test_tfms)
-    
-    print(f"Training samples: {len(train_set)}")
-    print(f"Validation samples: {len(val_set)}")
-    
-    # Create data loaders with error handling
-    train_loader = DataLoader(
-        train_set,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=min(4, workers),  # Limit workers to avoid issues
-        pin_memory=True,
-        drop_last=True,  # Drop last incomplete batch
-        persistent_workers=workers > 0  # Keep workers alive between epochs
+    train_dataset = PascalVOCTrainDataset(
+        root=root, image_set="train", download=download, transform=train_tfms
     )
-    
+    val_dataset = PascalVOCTrainDataset(
+        root=root, image_set="val", download=False, transform=test_tfms
+    )
+
+    train_loader = DataLoader(
+        train_dataset, 
+        batch_size=batch_size, 
+        shuffle=True, 
+        num_workers=workers, 
+        pin_memory=True,
+        collate_fn=custom_collate_fn,
+        drop_last=True
+    )
     val_loader = DataLoader(
-        val_set,
-        batch_size=batch_size,
-        shuffle=False,
+        val_dataset, 
+        batch_size=1, 
+        shuffle=False, 
         num_workers=min(2, workers),  # Use fewer workers for validation
         pin_memory=True,
+        collate_fn=custom_collate_fn,
         drop_last=False,  # Don't drop last batch in validation
         persistent_workers=workers > 0
     )
