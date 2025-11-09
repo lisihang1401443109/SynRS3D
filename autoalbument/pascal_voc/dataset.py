@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from torchvision.datasets import VOCSegmentation
 import torch
+import os
 import PIL
 
 cv2.setNumThreads(0)
