@@ -179,13 +179,13 @@ data:
 optim:
   main:
     _target_: torch.optim.Adam
-    lr: 1e-6
+    lr: 3e-6
     betas: [0, 0.999]
   # Optimizer configuration for the main (either Classification or Semantic Segmentation) Model
 
   policy:
     _target_: torch.optim.Adam
-    lr: 1e-6
+    lr: 3e-6
     betas: [0, 0.999]
   # Optimizer configuration for Policy Model
 

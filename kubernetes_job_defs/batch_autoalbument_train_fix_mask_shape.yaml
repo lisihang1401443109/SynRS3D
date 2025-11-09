@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask-shape
+  name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask-shape
+    job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask-shape
+        job-name: sihang-autoalbument-train-50k-job-only-brightness-fix-mask
     spec:
       restartPolicy: Never
       containers:
