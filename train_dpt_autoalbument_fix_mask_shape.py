@@ -375,7 +375,7 @@ def main():
             #     ss_masks = ss_masks.permute(0, 2, 1)
             # ss_masks = ss_masks.permute(1, 2, 0)
             ss_masks = ss_masks.permute(0, 2, 3, 1)
-            ss_masks = ss_masks.long().cuda()
+            ss_masks = ss_masks.squeeze(dim=1).long().cuda()
         # print mask shape
         # print(ss_masks.shape)
         
