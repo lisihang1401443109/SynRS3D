@@ -110,8 +110,10 @@ class PascalVOCTrainDataset(VOCSegmentation):
         if not isinstance(mask, np.ndarray):
             raise ValueError(f"Expected numpy array for mask, got {type(mask)}")
             
-        if mask.dtype != np.uint8:
+        if isinstance(mask, np.ndarray) and mask.dtype != np.uint8:
             mask = mask.astype(np.uint8)
+        elif torch.is_tensor(mask) and mask.dtype != torch.uint8:
+            mask = mask.to(dtype=torch.uint8)
             
         height, width = mask.shape[:2]
         segmentation_mask = np.zeros((height, width, len(VOC_COLORMAP)), dtype=np.float32)
