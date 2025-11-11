@@ -122,8 +122,14 @@ class PascalVOCTrainDataset(VOCSegmentation):
             # Convert both mask and label to uint8 for comparison
             label_arr = np.array(label, dtype=np.uint8).reshape(1, 1, 3)
             # Compare RGB values
-            segmentation_mask[:, :, label_index] = np.all(mask == label_arr, axis=-1).astype(np.float32)
+            segmentation_mask[:, :, label_index] = np.all(mask == label_arr, axis=-1)
             
+        # Convert boolean mask to float
+        if isinstance(segmentation_mask, np.ndarray):
+            segmentation_mask = segmentation_mask.astype(np.float32)
+        elif torch.is_tensor(segmentation_mask):
+            segmentation_mask = segmentation_mask.to(dtype=torch.float32)
+        
         return segmentation_mask
     
     def _load_image(self, path):
