@@ -25,7 +25,7 @@ python train_dpt_autoalbument_only_essential.py \
 --decoder DPT \
 --snapshot_dir "$SNAPSHOT_DIR" \
 --images_file ${images_file[*]} \
---batch_size 16 \
+--batch_size 8 \
 --learning_rate 1e-6 \
 --weight_decay 5e-4 \
 --warmup_steps 0 \
