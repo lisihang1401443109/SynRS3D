@@ -89,6 +89,7 @@ class AutoAlbumentDataset(Dataset):
             transformed = self.transform(image=image, mask=mask_one_hot)
             image = transformed['image']
             mask_one_hot = transformed['mask']
+        print(image.shape, mask_one_hot.shape)
         
         return image, mask_one_hot
 
