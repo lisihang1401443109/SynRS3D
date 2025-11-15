@@ -46,7 +46,7 @@ spec:
               nvidia-smi
 
               git checkout gaussian-baselines
-              # git pull
+              git pull
               # git reset --hard origin/gaussian-baselines 
 
               cd autoalbument
