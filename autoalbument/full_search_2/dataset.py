@@ -80,12 +80,9 @@ class AutoAlbumentDataset(Dataset):
         mask = cv2.imread(self.mask_paths[idx], cv2.IMREAD_UNCHANGED)
         if len(mask.shape) > 2:
             mask = mask[:, :, 0]  # Take first channel if mask is multi-channel
-            
-        # Convert to one-hot encoding if necessary
-        if mask.ndim == 2:
-            mask_one_hot = self._convert_to_one_hot(mask)
-        else:
-            mask_one_hot = mask
+        
+        # Convert to one-hot encoding
+        mask_one_hot = self._convert_to_one_hot(mask)
         
         # Apply transforms if specified
         if self.transform is not None:
