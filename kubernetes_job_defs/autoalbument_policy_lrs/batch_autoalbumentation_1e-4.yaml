@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-policy-full-50k-job
+  name: sihang-autoalbument-policy-full-50k-1e-4-job
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-policy-full-50k-job
+    job-name: sihang-autoalbument-policy-full-50k-1e-4-job
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-policy-full-50k-job
+        job-name: sihang-autoalbument-policy-full-50k-1e-4-job
     spec:
       affinity:
         nodeAffinity:
@@ -53,7 +53,7 @@ spec:
               bash install_autoalbument.sh
               export HYDRA_FULL_ERROR=1
               conda activate autoalbument
-              cd full_search
+              cd full_search_1
               bash run_autoalbument.sh
               
               
