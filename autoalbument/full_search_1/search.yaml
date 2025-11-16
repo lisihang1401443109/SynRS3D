@@ -185,7 +185,7 @@ optim:
 
   policy:
     _target_: torch.optim.Adam
-    lr: 1e-4
+    lr: 3e-4
     betas: [0, 0.999]
   # Optimizer configuration for Policy Model
 

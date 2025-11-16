@@ -55,7 +55,7 @@ spec:
                 --epochs ${EPOCHS:-50} \
                 --batch_size ${BATCH_SIZE:-8} \
                 --workers ${WORKERS:-4} \
-                --lr ${LR:-0.01} \
+                --lr ${LR:-0.001} \
                 --weight_decay ${WEIGHT_DECAY:-1e-4} \
                 --size ${SIZE:-256} \
                 --pretrained \
