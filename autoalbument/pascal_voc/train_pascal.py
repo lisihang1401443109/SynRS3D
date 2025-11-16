@@ -117,7 +117,7 @@ def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay,
                     images = images.to(device)
                     
                     # Convert mask to proper format
-                    print(masks.shape)
+                    # print(masks.shape)
                     if masks.dim() == 4:  # (B, C, H, W) or (B, H, W, C)
                         if masks.shape[1] == num_classes:  # (B, C, H, W)
                             masks = masks.argmax(dim=1)

@@ -61,7 +61,7 @@ spec:
                 --pretrained \
                 --output_dir "$OUT_DIR" \
                 --log_dir "$LOG_DIR" \
-                --download \
+                # --download \
                 --policy_json "/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/outputs/2025-10-27/06-55-07/policy/latest.json"
           resources:
             limits:
