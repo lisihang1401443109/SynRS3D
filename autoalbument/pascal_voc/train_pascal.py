@@ -97,6 +97,7 @@ def evaluate_miou(model, loader, device, num_classes):
 
 
 def train_one(model, train_loader, val_loader, device, epochs, lr, weight_decay, num_classes, writer, save_best_path):
+    print("Training model")
     model.to(device)
     criterion = nn.CrossEntropyLoss()
     params = [p for p in model.parameters() if p.requires_grad]
@@ -326,6 +327,7 @@ def main():
         results["baseline_best_miou"] = base_best
 
     if args.policy_json and os.path.isfile(args.policy_json):
+        print(f"Loading policy from {args.policy_json}")
         policy_tfms = get_policy_train_transforms(args.policy_json, size=args.size)
         print(policy_tfms)
         pol_train_loader, pol_val_loader = build_loaders(
