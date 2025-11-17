@@ -46,31 +46,38 @@ spec:
               OUT_DIR=${OUT_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/outputs/"}
               LOG_DIR=${LOG_DIR:-"/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/runs/"}
 
-              mkdir -p "$OUT_DIR" "$LOG_DIR"
+              temp_out_dir="./temp_out_dir"
+              temp_log_dir="./temp_log_dir"
+
+              mkdir -p $temp_out_dir $temp_log_dir
 
 
               nvidia-smi
               python autoalbument/pascal_voc/train_pascal.py \
                 --data_root "$DATA_ROOT" \
-                --epochs ${EPOCHS:-50} \
+                --epochs ${EPOCHS:-100} \
                 --batch_size ${BATCH_SIZE:-8} \
                 --workers ${WORKERS:-4} \
                 --lr ${LR:-0.001} \
                 --weight_decay ${WEIGHT_DECAY:-1e-4} \
                 --size ${SIZE:-256} \
                 --pretrained \
-                --output_dir "$OUT_DIR" \
-                --log_dir "$LOG_DIR" \
+                --output_dir "$temp_out_dir" \
+                --log_dir "$temp_log_dir" \
                 # --download \
                 --policy_json "/mnt/synrs3d/SynRS3D/autoalbument/pascal_voc/outputs/2025-10-27/06-55-07/policy/latest.json"
+
+                # copy temp_out_dir and temp_log_dir to OUT_DIR and LOG_DIR
+                cp -r $temp_out_dir $OUT_DIR
+                cp -r $temp_log_dir $LOG_DIR
           resources:
             limits:
               cpu: "2"
-              memory: 8Gi
+              memory: 16Gi
               nvidia.com/gpu: "1"
             requests:
               cpu: "1"
-              memory: 4Gi
+              memory: 8Gi
               nvidia.com/gpu: "1"
           volumeMounts:
             - name: pvc-storage
