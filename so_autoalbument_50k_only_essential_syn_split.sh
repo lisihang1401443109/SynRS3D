@@ -34,7 +34,7 @@ python train_dpt_autoalbument_only_essential.py \
 --decay_mode poly \
 --num_steps 50000 \
 --save_num_images 0 \
---save_pred_every 500 \
+--save_pred_every 1000 \
 --multi_task \
 --pretrained \
 --shuffle \
