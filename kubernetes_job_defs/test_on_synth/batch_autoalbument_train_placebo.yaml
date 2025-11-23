@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sihang-autoalbument-train-50k-job-full-only-essential
+  name: sihang-autoalbument-train-50k-job-placebo-only-essential
   namespace: gp-engine-malof
   labels:
-    job-name: sihang-autoalbument-train-50k-job-full-only-essential
+    job-name: sihang-autoalbument-train-50k-job-placebo-only-essential
 spec:
   parallelism: 1
   completions: 1
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        job-name: sihang-autoalbument-train-50k-job-full-only-essential
+        job-name: sihang-autoalbument-train-50k-job-placebo-only-essential
     spec:
       affinity:
         nodeAffinity:
@@ -84,8 +84,8 @@ spec:
               # Make the script executable and run it
               # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash so_autoalbument_50k_only_essential_syn_split.sh \
-                autoalbument/policies/full_3e-3_1e-3.json \
-                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_full_only_essential_syn_split
+                autoalbument/policies/placebo_policy.json \
+                /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_placebo_syn_split
 
               # Optional: Run evaluation after training completes
               # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log

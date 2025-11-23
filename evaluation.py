@@ -180,7 +180,7 @@ def main():
                                 # even_0_3=args.even_0_3,
                                 # even_3_b=args.even_3_b,
                                 )
-        testloader = data.DataLoader(testdataset, batch_size=1, shuffle=False)
+        testloader = data.DataLoader(testdataset, batch_size=1, shuffle=False, collate_fn=custom_collate)
         testloaders[base_folder_name] = testloader  # Store using the base folder name as the key
         
     if args.eval_oem:
