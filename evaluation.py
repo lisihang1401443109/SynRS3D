@@ -294,7 +294,7 @@ def eval(testloaders, model, num_images_to_save, writer, logger, i_iter, args=No
             ss_masks = batch.get('ss_mask', None)
             if ss_masks is not None and eval_multi_task:
                 ss_masks = np.squeeze(ss_masks.cpu().numpy().astype(np.uint8))
-                mask = ss_masks >= 0
+                mask = (ss_masks >= 0) & (ss_masks != 255)
             with torch.no_grad():
                 pre_outputs = model(images.cuda())
                 pre_dsms = pre_outputs.get('regression', None).cpu().numpy()
