@@ -290,6 +290,9 @@ def eval(testloaders, model, num_images_to_save, writer, logger, i_iter, args=No
                 ss_metric_op = ss_metric.PixelMetric(num_classes = dataset_num_classes[get_dataset_category(set([dataset_name]))])
         
         for index, batch in enumerate(tqdm(testloader)):
+            if batch is None:
+                print(f'batch[{index}] is none')
+                continue
             images, dsms = batch['image'], batch['dsm']
             ss_masks = batch.get('ss_mask', None)
             if ss_masks is not None and eval_multi_task:
