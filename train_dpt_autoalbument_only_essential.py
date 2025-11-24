@@ -312,7 +312,7 @@ def main():
                                 multi_task=True if args.multi_task and base_folder_name in ss_datasetname else False,
                                 combine_class=False if not args.combine_class and get_dataset_category(set([base_folder_name]))==train_dataset_type else True,
                                 )
-        testloader = data.DataLoader(testdataset, batch_size=1, shuffle=False)
+        testloader = data.DataLoader(testdataset, batch_size=1, shuffle=False, collate_fn=custom_collate)
         testloaders[base_folder_name] = testloader  # Store using the base folder name as the key
     
     if args.eval_oem: 
