@@ -52,8 +52,7 @@ spec:
               # Pull the nested autoalbument repo to ensure latest changes
               echo "Pulling nested autoalbument repo..."
               cd autoalbument/autoalbument
-              git checkout master
-              git pull
+              git clone https://github.com/lisihang1401443109/autoalbument.git
               cd ../..
 
               cd autoalbument
