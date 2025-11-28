@@ -41,6 +41,7 @@ echo -e "\n${GREEN}Installing AutoAlbument and dependencies...${NC}"
 # pip install --upgrade pip
 python -m pip install --upgrade pip==23
 # pip install -U autoalbument
+cd autoalbument 
 pip install -e autoalbument
 
 

@@ -61,7 +61,8 @@ spec:
               bash install_autoalbument.sh
               export HYDRA_FULL_ERROR=1
               conda activate autoalbument
-              cd full_search
+              cd stylization
+              export PYTHONPATH=$PYTHONPATH:/mnt/synrs3d/SynRS3D/autoalbument/autoalbument
 
               # Run AutoAlbument with target dataset configuration using the new config directory
               # Replace placeholders with actual paths and parameters
