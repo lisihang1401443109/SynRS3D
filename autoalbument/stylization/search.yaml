@@ -124,7 +124,7 @@ data:
 
   target_dataset:
     _target_: dataset.AutoAlbumentDataset
-    root: /mnt/synrs3d/SynRS3D/data/target_dataset_name
+    root: /mnt/synrs3d/SynRS3D/data/OEM
     image_dir: opt
     mask_dir: gt_ss_mask
     split_file: subset_train.txt

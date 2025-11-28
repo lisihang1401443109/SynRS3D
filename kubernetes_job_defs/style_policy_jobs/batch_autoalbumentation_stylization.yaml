@@ -64,12 +64,8 @@ spec:
               cd stylization
               export PYTHONPATH=$PYTHONPATH:/mnt/synrs3d/SynRS3D/autoalbument/autoalbument
 
-              # Run AutoAlbument with target dataset configuration using the new config directory
-              # Replace placeholders with actual paths and parameters
-              autoalbument-search \
-                  --config-dir /mnt/synrs3d/SynRS3D/autoalbument/stylization \
-                  data.dataset.root=/mnt/synrs3d/SynRS3D/data/source_dataset \
-                  data.target_dataset.root=/mnt/synrs3d/SynRS3D/data/OEM
+              # run autoalbument
+              bash run_autoalbument.sh
 
           resources:
             limits:
