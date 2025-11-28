@@ -81,8 +81,6 @@ spec:
 
 
 
-              # Make the script executable and run it
-              # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash so_autoalbument_50k_only_essential_syn_split.sh \
                 autoalbument/policies/placebo_policy.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_placebo_syn_split

@@ -77,12 +77,6 @@ spec:
               git checkout gaussian-baselines
               git pull
 
-
-
-
-
-              # Make the script executable and run it
-              # chmod +x /mnt/synrs3d/SynRS3D/so_autoalbument_50k.sh
               bash so_autoalbument_50k_only_essential_syn_split.sh \
                 autoalbument/policies/full_3e-3_1e-3.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_full_only_essential_syn_split

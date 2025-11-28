@@ -11,7 +11,7 @@ train_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g0
 test_set=('grid_g05_mid_v2' 'grid_g005_mid_v2' 'terrain_g05_low_v1' 'terrain_g005_low_v1' 'grid_g05_mid_v1' 'grid_g005_mid_v1' 'terrain_g05_mid_v1' 'terrain_g005_mid_v1' 'grid_g05_low_v1' 'grid_g005_low_v1' 'grid_g05_high_v1' 'grid_g005_high_v1' 'terrain_g05_high_v1' 'terrain_g005_high_v1' 'terrain_g1_low_v1' 'terrain_g1_mid_v1' 'terrain_g1_high_v1')
 
 # images_file=('train.txt' 'test_syn.txt' 'train.txt')
-images_file=('train_syn.txt' 'test_syn_2.txt' 'test_syn_2.txt')
+images_file=('train_syn.txt' 'test_syn_2.txt' 'train.txt')
 da=()
 
 # POLICY_PATH="/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest_392.json"
