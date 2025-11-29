@@ -3,6 +3,8 @@ import os
 def remove_tif_extension(root_dir):
     print(f"Searching for subset_train.txt files in {root_dir}...")
     for dirpath, dirnames, filenames in os.walk(root_dir):
+        if "OEM" not in dirpath:
+            continue
         if "subset_train.txt" in filenames:
             file_path = os.path.join(dirpath, "subset_train.txt")
             print(f"Processing {file_path}...")
