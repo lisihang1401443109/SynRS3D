@@ -43,7 +43,7 @@ class AutoAlbumentDataset(Dataset):
         
         # Read image IDs from split file
         with open(os.path.join(root, split_file), 'r') as f:
-            self.image_ids = [line.strip() for line in f]
+            self.image_ids = [line.strip().replace('.tif', '') for line in f]
             
         if max_samples is not None:
             self.image_ids = self.image_ids[:max_samples]
