@@ -51,9 +51,9 @@ spec:
 
               # Pull the nested autoalbument repo to ensure latest changes
               echo "Pulling nested autoalbument repo..."
-              cd autoalbument/autoalbument
+              cd autoalbument
               git clone https://github.com/lisihang1401443109/autoalbument.git
-              cd ../..
+              cd ..
 
               cd autoalbument
               # This script now installs from local source (pip install -e autoalbument)
