@@ -1,0 +1,754 @@
+{
+    "__version__": "1.4.18",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "position": "center",
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "OneOf",
+                "p": 1,
+                "transforms": [
+                    {
+                        "__class_fullname__": "Sequential",
+                        "p": 1.0,
+                        "transforms": [
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 8.99722373295483e-08,
+                                        "r_shift_limit": [
+                                            -0.27127593755722046,
+                                            -0.27127593755722046
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.0014997942236117667,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            0.4321078062057495,
+                                            0.4321078062057495
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 2.8104426028493015e-05,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.6227395534515381,
+                                            -0.6227395534515381
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 9.877834468516158e-08,
+                                        "brightness_limit": [
+                                            0.9302973747253418,
+                                            0.9302973747253418
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 3.6456262042266796e-06,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            4.951538562774658,
+                                            4.951538562774658
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "HorizontalFlip",
+                                        "p": 3.7489654928254783e-06
+                                    },
+                                    {
+                                        "__class_fullname__": "VerticalFlip",
+                                        "p": 0.0068751503843906825
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.00020655741456709203,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            -130.56021118164062,
+                                            -130.56021118164062
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 3.2227267422209505e-08,
+                                        "shift_limit_x": [
+                                            -0.4304996728897095,
+                                            -0.4304996728897095
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.0004822631360662799,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.03774392604827881,
+                                            0.03774392604827881
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.07769971088234229,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            7.31965446472168,
+                                            7.31965446472168
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 2.3929066713697616e-05,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            16,
+                                            16
+                                        ],
+                                        "hole_height_range": [
+                                            228,
+                                            228
+                                        ],
+                                        "hole_width_range": [
+                                            228,
+                                            228
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 0.7819121228811454,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            8,
+                                            8
+                                        ],
+                                        "hole_height_range": [
+                                            24,
+                                            24
+                                        ],
+                                        "hole_width_range": [
+                                            24,
+                                            24
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.13126475201558785
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 3.167291529385605e-07,
+                                        "r_shift_limit": [
+                                            -0.6148909330368042,
+                                            -0.6148909330368042
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.010509552943458456,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            0.778042197227478,
+                                            0.778042197227478
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 6.296087285190425e-09,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            0.39836716651916504,
+                                            0.39836716651916504
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 5.109453814858029e-07,
+                                        "brightness_limit": [
+                                            0.6173537969589233,
+                                            0.6173537969589233
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.007985789828195422,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            9.333824157714844,
+                                            9.333824157714844
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "HorizontalFlip",
+                                        "p": 5.946041540834781e-09
+                                    },
+                                    {
+                                        "__class_fullname__": "VerticalFlip",
+                                        "p": 3.5087278945162354e-09
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 5.381620709953591e-06,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            -107.5589828491211,
+                                            -107.5589828491211
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.004879058953846133,
+                                        "shift_limit_x": [
+                                            -8.404254913330078e-06,
+                                            -8.404254913330078e-06
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 1.3941429159486872e-05,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.6223753690719604,
+                                            0.6223753690719604
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 5.887716099817891e-06,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            1.406137466430664,
+                                            1.406137466430664
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 0.2784563238357727,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            16,
+                                            16
+                                        ],
+                                        "hole_height_range": [
+                                            377,
+                                            377
+                                        ],
+                                        "hole_width_range": [
+                                            377,
+                                            377
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 1.8998221510220834e-09,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            6,
+                                            6
+                                        ],
+                                        "hole_height_range": [
+                                            24,
+                                            24
+                                        ],
+                                        "hole_width_range": [
+                                            24,
+                                            24
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.6981432183475448
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 3.938391142154895e-06,
+                                        "r_shift_limit": [
+                                            -0.4320087432861328,
+                                            -0.4320087432861328
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 7.567363662697087e-08,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.534430980682373,
+                                            -0.534430980682373
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.14060758107367466,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.7667573094367981,
+                                            -0.7667573094367981
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.4154113644117423,
+                                        "brightness_limit": [
+                                            -0.10697436332702637,
+                                            -0.10697436332702637
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 1.6303163439454556e-08,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            8.405431747436523,
+                                            8.405431747436523
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "HorizontalFlip",
+                                        "p": 0.0005332661460612995
+                                    },
+                                    {
+                                        "__class_fullname__": "VerticalFlip",
+                                        "p": 7.311609601229165e-10
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.06109154479034018,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            -120.62904357910156,
+                                            -120.62904357910156
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 0.03531257908156893,
+                                        "shift_limit_x": [
+                                            -0.6102665066719055,
+                                            -0.6102665066719055
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 5.341742284149716e-07,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.4505493640899658,
+                                            0.4505493640899658
+                                        ],
+                                        "scale_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "ShiftScaleRotate",
+                                        "p": 5.0415302082574915e-11,
+                                        "shift_limit_x": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "shift_limit_y": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "scale_limit": [
+                                            8.940640449523926,
+                                            8.940640449523926
+                                        ],
+                                        "rotate_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "interpolation": 1,
+                                        "border_mode": 4,
+                                        "value": 0.0,
+                                        "mask_value": 0.0,
+                                        "rotate_method": "largest_box"
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 2.0319441521158114e-09,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            16,
+                                            16
+                                        ],
+                                        "hole_height_range": [
+                                            388,
+                                            388
+                                        ],
+                                        "hole_width_range": [
+                                            388,
+                                            388
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "CoarseDropout",
+                                        "p": 0.0008294079612308838,
+                                        "fill_value": 0.0,
+                                        "mask_fill_value": null,
+                                        "num_holes_range": [
+                                            8,
+                                            8
+                                        ],
+                                        "hole_height_range": [
+                                            24,
+                                            24
+                                        ],
+                                        "hole_width_range": [
+                                            24,
+                                            24
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.34620968917969064
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "__class_fullname__": "Normalize",
+                "p": 1.0,
+                "mean": [
+                    123.67500305175781,
+                    116.27999877929688,
+                    103.52999877929688
+                ],
+                "std": [
+                    58.39500045776367,
+                    57.119998931884766,
+                    57.375
+                ],
+                "max_pixel_value": 1.0,
+                "normalization": "standard"
+            },
+            {
+                "__class_fullname__": "ToTensorV2",
+                "p": 1.0,
+                "transpose_mask": true
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}

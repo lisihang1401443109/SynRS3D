@@ -1,0 +1,99 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sihang-autoalbument-stylization-brightness-job
+  namespace: gp-engine-malof
+  labels:
+    job-name: sihang-autoalbument-stylization-brightness-job
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        job-name: sihang-autoalbument-stylization-brightness-job
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - Tesla-V100-SXM2-32GB
+      restartPolicy: Never
+      containers:
+        - name: pvc-test-container
+          # image: ghcr.io/albumentations-team/autoalbument:latest
+          image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-v1.5.0
+          imagePullPolicy: Always
+          command:
+            - /bin/bash
+            - "-c"
+          args:
+            - |
+              # Activate base environment
+              source activate base
+
+
+              # install git
+              apt update && apt install git -y
+
+              # Navigate to SynRS3D directory
+              cd /mnt/synrs3d/SynRS3D
+              nvidia-smi
+
+              git checkout gaussian-baselines
+              git pull
+              # git reset --hard origin/gaussian-baselines 
+
+              # Pull the nested autoalbument repo to ensure latest changes
+              echo "Pulling nested autoalbument repo..."
+              cd autoalbument
+              git clone https://github.com/lisihang1401443109/autoalbument.git
+              git pull
+              cd ..
+
+              cd autoalbument
+              # This script now installs from local source (pip install -e autoalbument)
+              bash install_autoalbument.sh
+              export HYDRA_FULL_ERROR=1
+              conda activate autoalbument
+              cd stylization_brightness
+              export PYTHONPATH=$PYTHONPATH:/mnt/synrs3d/SynRS3D/autoalbument/autoalbument
+
+              # run autoalbument
+              bash run_autoalbument.sh
+
+          resources:
+            limits:
+              cpu: "16"
+              memory: 32Gi
+              nvidia.com/gpu: "1"
+            requests:
+              cpu: "8"
+              memory: 16Gi
+              nvidia.com/gpu: "1"
+          volumeMounts:
+            - name: pvc-storage
+              mountPath: /mnt/synrs3d
+            - name: chuqiao-result
+              mountPath: /mnt/styled
+            - name: shm
+              mountPath: /dev/shm
+          securityContext:
+            runAsUser: 0
+      volumes:
+        - name: pvc-storage
+          persistentVolumeClaim:
+            claimName: synrs3d-test
+        - name: chuqiao-result
+          persistentVolumeClaim:
+            claimName: chuqiao-result-pvc
+        - name: shm
+          emptyDir:
+            medium: Memory
+      terminationGracePeriodSeconds: 30
+  ttlSecondsAfterFinished: 86400
