@@ -6,25 +6,59 @@ import cv2
 import numpy as np
 import tifffile
 
-def filter_transforms(config, threshold=0.01):
+def simplify_policy(config, threshold=0.1):
     """
-    Recursively filter transforms in the configuration based on probability.
+    Simplify the policy by deterministically selecting the maximal non-NoOp operation
+    in OneOf blocks, provided it exceeds the threshold.
     """
     if not isinstance(config, dict):
         return config
 
-    # If it's a composition or wrapper that has 'transforms'
+    # Handle specific transforms to remove
+    name = config.get("__class_fullname__", "")
+    if name in ["Normalize", "ToTensorV2", "NoOp"]:
+        return None
+
+    # If it has children (Compose, Sequential, OneOf)
     if "transforms" in config:
-        new_transforms = []
-        for t in config["transforms"]:
-            # Check probability if it exists
-            p = t.get("p", 1.0)
-            if p >= threshold:
-                # Recursively filter children
-                filtered_t = filter_transforms(t, threshold)
-                new_transforms.append(filtered_t)
-        config["transforms"] = new_transforms
-    
+        children = config["transforms"]
+        
+        if name == "OneOf":
+            # Find the best non-NoOp child
+            best_child = None
+            max_p = -1.0
+            
+            for child in children:
+                child_name = child.get("__class_fullname__", "")
+                if child_name == "NoOp":
+                    continue
+                
+                p = child.get("p", 0.0)
+                if p > max_p:
+                    max_p = p
+                    best_child = child
+            
+            # If we found a candidate and it meets the threshold
+            if best_child and max_p >= threshold:
+                return simplify_policy(best_child, threshold)
+            else:
+                return None
+        else:
+            # For Sequential/Compose, simplify all children
+            new_children = []
+            for child in children:
+                simplified_child = simplify_policy(child, threshold)
+                if simplified_child is not None:
+                    new_children.append(simplified_child)
+            
+            # If no children remain, return None (unless it's the root or something we want to keep empty?)
+            # But usually an empty Compose is useless.
+            if not new_children:
+                return None
+                
+            config["transforms"] = new_children
+            return config
+
     return config
 
 def main():
@@ -32,7 +66,7 @@ def main():
     parser.add_argument("--policy", required=True, help="Path to the policy JSON file")
     parser.add_argument("--image", required=True, help="Path to the source image (TIFF)")
     parser.add_argument("--output", required=True, help="Output directory for transformed images")
-    parser.add_argument("--threshold", type=float, default=0.01, help="Probability threshold to ignore transforms")
+    parser.add_argument("--threshold", type=float, default=0.1, help="Probability threshold to select operations (default: 0.1)")
     parser.add_argument("--num_images", type=int, default=5, help="Number of transformed images to generate")
     
     args = parser.parse_args()
@@ -43,23 +77,38 @@ def main():
 
     print(f"Loaded policy from {args.policy}")
 
-    # 2. Filter Policy
-    # The policy JSON usually has a structure like {"transform": {...}} or just the transform dict
-    # Based on the user's file, it starts with {"__version__": ..., "transform": {...}}
-    
+    # 2. Simplify Policy
     if "transform" in policy_data:
         transform_config = policy_data["transform"]
     else:
         transform_config = policy_data
 
-    filtered_config = filter_transforms(transform_config, args.threshold)
+    # Simplify the config
+    # We work on a copy to avoid mutating the original if we needed it (though here we don't)
+    import copy
+    simplified_config = simplify_policy(copy.deepcopy(transform_config), args.threshold)
     
-    print(f"Filtered transforms with threshold {args.threshold}")
+    if simplified_config is None:
+        print("Warning: Policy simplified to nothing (all probabilities below threshold).")
+        simplified_config = {"__class_fullname__": "Compose", "transforms": []}
+
+    print(f"Simplified policy with threshold {args.threshold}")
+
+    # Reconstruct the full dict for A.from_dict
+    full_config = {"transform": simplified_config}
+    if "__version__" in policy_data:
+        full_config["__version__"] = policy_data["__version__"]
+
+    print("Simplified Policy Configuration:")
+    print(json.dumps(full_config, indent=2))
 
     # 3. Create Pipeline
     try:
-        transform = A.from_dict(filtered_config)
+        # print(f"DEBUG: full_config keys: {full_config.keys()}")
+        transform = A.from_dict(full_config)
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"Error creating albumentations pipeline: {e}")
         # Fallback: sometimes from_dict expects the full dict including __version__ if it was serialized that way,
         # but usually it expects the transform dict. 
