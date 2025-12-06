@@ -6,60 +6,39 @@ import cv2
 import numpy as np
 import tifffile
 
-def simplify_policy(config, threshold=0.1):
+def make_deterministic(transform):
     """
-    Simplify the policy by deterministically selecting the maximal non-NoOp operation
-    in OneOf blocks, provided it exceeds the threshold.
+    Recursively select most probable transforms (ignoring NoOp) and set p=1.
+    Returns the selected transform or None if it should be removed (e.g. NoOp).
     """
-    if not isinstance(config, dict):
-        return config
-
-    # Handle specific transforms to remove
-    name = config.get("__class_fullname__", "")
-    if name in ["Normalize", "ToTensorV2", "NoOp"]:
+    name = transform.__class__.__name__
+    
+    if name == 'NoOp':
         return None
-
-    # If it has children (Compose, Sequential, OneOf)
-    if "transforms" in config:
-        children = config["transforms"]
         
-        if name == "OneOf":
-            # Find the best non-NoOp child
-            best_child = None
-            max_p = -1.0
-            
-            for child in children:
-                child_name = child.get("__class_fullname__", "")
-                if child_name == "NoOp":
-                    continue
-                
-                p = child.get("p", 0.0)
-                if p > max_p:
-                    max_p = p
-                    best_child = child
-            
-            # If we found a candidate and it meets the threshold
-            if best_child and max_p >= threshold:
-                return simplify_policy(best_child, threshold)
-            else:
-                return None
-        else:
-            # For Sequential/Compose, simplify all children
-            new_children = []
-            for child in children:
-                simplified_child = simplify_policy(child, threshold)
-                if simplified_child is not None:
-                    new_children.append(simplified_child)
-            
-            # If no children remain, return None (unless it's the root or something we want to keep empty?)
-            # But usually an empty Compose is useless.
-            if not new_children:
-                return None
-                
-            config["transforms"] = new_children
-            return config
-
-    return config
+    if isinstance(transform, A.OneOf):
+        # Filter NoOp
+        candidates = [t for t in transform.transforms if t.__class__.__name__ != 'NoOp']
+        if not candidates:
+            return None
+        # Pick max p
+        best_child = max(candidates, key=lambda t: t.p)
+        return make_deterministic(best_child)
+        
+    if hasattr(transform, "transforms"):
+        # Sequential, Compose, etc.
+        new_transforms = []
+        for t in transform.transforms:
+            res = make_deterministic(t)
+            if res:
+                new_transforms.append(res)
+        transform.transforms = new_transforms
+        transform.p = 1.0
+        return transform
+        
+    # Atomic
+    transform.p = 1.0
+    return transform
 
 def main():
     parser = argparse.ArgumentParser(description="Visualize AutoAugment Policy")
@@ -71,50 +50,60 @@ def main():
     
     args = parser.parse_args()
 
-    # 1. Load Policy
-    with open(args.policy, "r") as f:
-        policy_data = json.load(f)
-
-    print(f"Loaded policy from {args.policy}")
-
-    # 2. Simplify Policy
-    if "transform" in policy_data:
-        transform_config = policy_data["transform"]
-    else:
-        transform_config = policy_data
-
-    # Simplify the config
-    # We work on a copy to avoid mutating the original if we needed it (though here we don't)
-    import copy
-    simplified_config = simplify_policy(copy.deepcopy(transform_config), args.threshold)
-    
-    if simplified_config is None:
-        print("Warning: Policy simplified to nothing (all probabilities below threshold).")
-        simplified_config = {"__class_fullname__": "Compose", "transforms": []}
-
-    print(f"Simplified policy with threshold {args.threshold}")
-
-    # Reconstruct the full dict for A.from_dict
-    full_config = {"transform": simplified_config}
-    if "__version__" in policy_data:
-        full_config["__version__"] = policy_data["__version__"]
-
-    print("Simplified Policy Configuration:")
-    print(json.dumps(full_config, indent=2))
-
-    # 3. Create Pipeline
+    # 2. Load Policy using A.load as suggested
     try:
-        # print(f"DEBUG: full_config keys: {full_config.keys()}")
-        transform = A.from_dict(full_config)
+        policy = A.load(args.policy, data_format='json')
+        print(f"Loaded policy from {args.policy}")
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Error creating albumentations pipeline: {e}")
-        # Fallback: sometimes from_dict expects the full dict including __version__ if it was serialized that way,
-        # but usually it expects the transform dict. 
-        # If the filtering modified it in a way A.from_dict doesn't like, we might need to be careful.
-        # Let's try to reconstruct the full dict if needed, but usually passing the transform dict is correct.
+        print(f"Error loading policy: {e}")
         return
+
+    # # 3. Create Pipeline
+    # # User suggestion: policy_list = policy.transforms[2:-2] # remove the non-essence ones
+    # try:
+    #     if hasattr(policy, 'transforms'):
+    #         # Check if we have enough transforms to slice
+    #         if len(policy.transforms) >= 4:
+    #             policy_list = policy.transforms[2:-2]
+    #             print(f"Sliced policy transforms, kept {len(policy_list)} transforms")
+    #         else:
+    #             policy_list = policy.transforms
+    #             print(f"Policy has fewer than 4 transforms, using all {len(policy_list)}")
+    #     else:
+    #         # Fallback if it's not a Compose or doesn't have transforms list in the expected way
+    #         # But A.load usually returns a Compose
+    #         policy_list = [policy]
+    #         print("Policy is not a Compose or has no transforms list, using as is")
+    policy = A.load(args.policy, data_format='json')
+    # print the policy
+    print(policy)
+    policy_list = policy.transforms[2:-2] # remove the non-essence ones     
+
+    # Apply deterministic selection
+    deterministic_list = []
+    for t in policy_list:
+        res = make_deterministic(t)
+        if res:
+            deterministic_list.append(res)
+            
+    print(f"Deterministic transforms: {deterministic_list}")
+
+    # Create a list of transforms for visualization
+    # We include RandomCrop as in the snippet, but we might want to make crop size configurable or match image size
+    # The snippet uses crop_size=392.
+    # We will omit Normalize and ToTensorV2 for visualization purposes to keep images viewable
+        
+    crop_size = 392
+    transforms = [
+        A.RandomCrop(crop_size, crop_size),
+        *deterministic_list
+    ]
+        
+    transform = A.Compose(transforms)
+        
+    # except Exception as e:
+    #     print(f"Error creating pipeline: {e}")
+    #     return
 
     # 4. Load Image
     try:
