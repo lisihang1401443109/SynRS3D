@@ -1,0 +1,5 @@
+Sequential([
+  CoarseDropout(p=1.0, fill=0.0, fill_mask=None, hole_height_range=(24.0, 24.0), hole_width_range=(24.0, 24.0), num_holes_range=(8, 8)),
+  CoarseDropout(p=1.0, fill=0.0, fill_mask=None, hole_height_range=(370.0, 370.0), hole_width_range=(370.0, 370.0), num_holes_range=(16, 16)),
+  RandomBrightnessContrast(p=1.0, brightness_by_max=True, brightness_limit=(-0.12795764207839966, -0.12795764207839966), contrast_limit=(0.0, 0.0), ensure_safe_range=False),
+], p=1.0)

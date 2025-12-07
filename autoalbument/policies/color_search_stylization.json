@@ -1,0 +1,322 @@
+{
+    "__version__": "1.4.18",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "position": "center",
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "OneOf",
+                "p": 1,
+                "transforms": [
+                    {
+                        "__class_fullname__": "Sequential",
+                        "p": 1.0,
+                        "transforms": [
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 1.6345464149227374e-05,
+                                        "r_shift_limit": [
+                                            -0.3718010187149048,
+                                            -0.3718010187149048
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.0012253596247745469,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.009973406791687012,
+                                            -0.009973406791687012
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.7659918450363179,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.23111051321029663,
+                                            -0.23111051321029663
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.001081152822741245,
+                                        "brightness_limit": [
+                                            -0.6371163129806519,
+                                            -0.6371163129806519
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 3.734078640392491e-05,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            2.658608913421631,
+                                            2.658608913421631
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.2316479562656132
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.3280699691652842,
+                                        "r_shift_limit": [
+                                            -0.6372506618499756,
+                                            -0.6372506618499756
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.00024124626571968115,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.025828421115875244,
+                                            -0.025828421115875244
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 5.401546428709844e-08,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            6.628036499023438e-05,
+                                            6.628036499023438e-05
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 1.5325576735095252e-09,
+                                        "brightness_limit": [
+                                            -0.34267377853393555,
+                                            -0.34267377853393555
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.16723021941115235,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            7.953876972198486,
+                                            7.953876972198486
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.5044585096098217
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.0002647690027701155,
+                                        "r_shift_limit": [
+                                            -0.0013597607612609863,
+                                            -0.0013597607612609863
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.269400263661268,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.6840080618858337,
+                                            -0.6840080618858337
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RGBShift",
+                                        "p": 0.0002966427681654754,
+                                        "r_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "g_shift_limit": [
+                                            -0.0,
+                                            0.0
+                                        ],
+                                        "b_shift_limit": [
+                                            -0.8183343410491943,
+                                            -0.8183343410491943
+                                        ]
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 9.672633861169998e-06,
+                                        "brightness_limit": [
+                                            0.5037442445755005,
+                                            0.5037442445755005
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.3037522081289534,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.42627644380498175
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "__class_fullname__": "Normalize",
+                "p": 1.0,
+                "mean": [
+                    123.67500305175781,
+                    116.27999877929688,
+                    103.52999877929688
+                ],
+                "std": [
+                    58.39500045776367,
+                    57.119998931884766,
+                    57.375
+                ],
+                "max_pixel_value": 1.0,
+                "normalization": "standard"
+            },
+            {
+                "__class_fullname__": "ToTensorV2",
+                "p": 1.0,
+                "transpose_mask": true
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}

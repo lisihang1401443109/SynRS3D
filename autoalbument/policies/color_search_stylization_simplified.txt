@@ -1,0 +1,5 @@
+Sequential([
+  RGBShift(p=1.0, approximation=1.0, b_shift_limit=(-0.23111051321029663, -0.23111051321029663), g_shift_limit=(-0.0, -0.0), noise_params={'noise_type': 'uniform', 'ranges': [(-0.0, -0.0), (-0.0, -0.0), (-0.23111051321029663, -0.23111051321029663)]}, noise_type='uniform', r_shift_limit=(-0.0, -0.0), spatial_mode='constant'),
+  RGBShift(p=1.0, approximation=1.0, b_shift_limit=(-0.0, -0.0), g_shift_limit=(-0.0, -0.0), noise_params={'noise_type': 'uniform', 'ranges': [(-0.6372506618499756, -0.6372506618499756), (-0.0, -0.0), (-0.0, -0.0)]}, noise_type='uniform', r_shift_limit=(-0.6372506618499756, -0.6372506618499756), spatial_mode='constant'),
+  RandomBrightnessContrast(p=1.0, brightness_by_max=True, brightness_limit=(0.0, 0.0), contrast_limit=(0.0, 0.0), ensure_safe_range=False),
+], p=1.0)
