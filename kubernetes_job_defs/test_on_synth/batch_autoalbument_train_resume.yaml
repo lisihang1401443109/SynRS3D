@@ -78,12 +78,7 @@ spec:
               git pull
 
               bash so_autoalbument_100k_resume.sh \
-                autoalbument/policies/full_3e-3_1e-3.json \
                 /mnt/synrs3d/SynRS3D/snapshot_so_autoalbument_50k_full_only_essential_syn_split
-
-              # Optional: Run evaluation after training completes
-              # bash /mnt/synrs3d/SynRS3D/eval_he.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_he.log
-              # bash /mnt/synrs3d/SynRS3D/eval_ss.sh >> /mnt/synrs3d/SynRS3D/eval_autoalbument_ss.log
 
           resources:
             limits:
