@@ -8,25 +8,18 @@ import tifffile
 
 def make_deterministic(transform):
     """
-    Recursively select most probable transforms (ignoring NoOp) and set p=1.
-    Returns the selected transform or None if it should be removed (e.g. NoOp).
+    Recursively select most probable transforms and set p=1.
     """
     name = transform.__class__.__name__
     
-    if name == 'NoOp':
-        return None
-        
     if isinstance(transform, A.OneOf):
-        # Filter NoOp
-        candidates = [t for t in transform.transforms if t.__class__.__name__ != 'NoOp']
+        candidates = [t for t in transform.transforms]
         if not candidates:
             return None
-        # Pick max p
         best_child = max(candidates, key=lambda t: t.p)
         return make_deterministic(best_child)
         
     if hasattr(transform, "transforms"):
-        # Sequential, Compose, etc.
         new_transforms = []
         for t in transform.transforms:
             res = make_deterministic(t)
@@ -36,7 +29,6 @@ def make_deterministic(transform):
         transform.p = 1.0
         return transform
         
-    # Atomic
     transform.p = 1.0
     return transform
 
