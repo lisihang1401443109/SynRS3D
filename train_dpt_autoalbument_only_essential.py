@@ -112,8 +112,10 @@ def get_arguments():
     parser.add_argument("--policy_path", type=str, 
                        default='/mnt/synrs3d/SynRS3D/autoalbument/outputs/2025-09-09/01-31-02/policy/latest.json',
                        help="Path to the AutoAlbument policy JSON file.")
+    parser.add_argument("--resume_from", type=str, default=None, help="Path to checkpoint to resume from.")
 
     return parser.parse_args()
+
 
 
 def get_autoalbument_transforms(policy_path, crop_size=392):
@@ -234,6 +236,16 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
+    
+    if args.resume_from:
+        if os.path.isfile(args.resume_from):
+            print(f"Loading checkpoint from {args.resume_from}")
+            checkpoint = torch.load(args.resume_from, map_location=device)
+            # Handle potential strict=False if model structure changed slightly, but typically strict=True is better
+            model.load_state_dict(checkpoint, strict=True)
+        else:
+            print(f"No checkpoint found at {args.resume_from}")
+
     
     if args.feat_loss:
         target_encoder = torch.hub.load('facebookresearch/dinov2', 'dinov2_{:}14'.format(args.encoder), pretrained=args.pretrained)        
