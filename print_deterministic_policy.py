@@ -9,17 +9,11 @@ import os
 
 def make_deterministic(transform):
     """
-    Recursively select most probable transforms (ignoring NoOp) and set p=1.
-    Returns the selected transform or None if it should be removed (e.g. NoOp).
+    Recursively select most probable transforms (including NoOp).
+    Retains the original p value for display purposes.
     """
-    name = transform.__class__.__name__
-    
-    if name == 'NoOp':
-        return None
-        
     if isinstance(transform, A.OneOf):
-        # Filter NoOp
-        candidates = [t for t in transform.transforms if t.__class__.__name__ != 'NoOp']
+        candidates = [t for t in transform.transforms]
         if not candidates:
             return None
         # Pick max p
@@ -34,11 +28,11 @@ def make_deterministic(transform):
             if res:
                 new_transforms.append(res)
         transform.transforms = new_transforms
-        transform.p = 1.0
+        # transform.p = 1.0  <-- Removed to keep original p
         return transform
         
     # Atomic
-    transform.p = 1.0
+    # transform.p = 1.0 <-- Removed to keep original p
     return transform
 
 def main():

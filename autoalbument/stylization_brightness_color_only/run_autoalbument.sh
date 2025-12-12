@@ -33,4 +33,4 @@ log "Running: autoalbument-search --config-dir /mnt/synrs3d/SynRS3D/autoalbument
 conda activate autoalbument
 
 autoalbument-search \
-    --config-dir /mnt/synrs3d/SynRS3D/autoalbument/stylization_brightness
+    --config-dir /mnt/synrs3d/SynRS3D/autoalbument/stylization_brightness_color_only
