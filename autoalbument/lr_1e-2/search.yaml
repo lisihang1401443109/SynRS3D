@@ -1,0 +1,95 @@
+# @package _global_
+
+_version: 2
+task: semantic_segmentation
+
+policy_model:
+  task_factor: 1
+  gp_factor: 10
+  temperature: 0.05
+  num_sub_policies: 1
+  num_chunks: 2
+  operation_count: 3
+  operations:
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+      shift_r: true
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+      shift_g: true
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.ShiftRGB
+      shift_b: true
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
+
+semantic_segmentation_model:
+  _target_: autoalbument.faster_autoaugment.models.SemanticSegmentationModel
+  num_classes: 8
+  architecture: DeepLabV3
+  encoder_architecture: resnet50
+  pretrained: true
+
+data:
+  dataset:
+    _target_: dataset.AutoAlbumentDataset
+    root: /mnt/synrs3d/SynRS3D/data/grid_g05_mid_v1
+    image_dir: opt
+    mask_dir: gt_ss_mask
+    split_file: subset_train.txt
+    num_classes: 8
+
+  target_dataset:
+    _target_: dataset.AutoAlbumentDataset
+    root: /mnt/synrs3d/SynRS3D/data/grid_g05_mid_v1
+    image_dir: opt
+    mask_dir: gt_ss_mask
+    split_file: subset_train.txt
+    num_classes: 8
+
+  target_preprocessing:
+    - RandomBrightnessContrast:
+        brightness_limit: [0.12, 0.12]
+        contrast_limit: [0.5, 0.5]
+        p: 1.0
+
+  input_dtype: float32
+  preprocessing:
+    - LongestMaxSize:
+        max_size: 392
+    - PadIfNeeded:
+        min_height: 392
+        min_width: 392
+        border_mode: 0
+        value: [0, 0, 0]
+
+  normalization:
+    mean: [123.675, 116.28, 103.53]
+    std: [58.395, 57.12, 57.375]
+
+  dataloader:
+    _target_: torch.utils.data.DataLoader
+    batch_size: 16
+    shuffle: true
+    num_workers: 8
+    pin_memory: true
+    drop_last: true
+
+optim:
+  main:
+    _target_: torch.optim.Adam
+    lr: 1e-2
+    betas: [0, 0.999]
+
+  policy:
+    _target_: torch.optim.Adam
+    lr: 1e-2
+    betas: [0, 0.999]
+
+seed: 42
+
+hydra:
+  run:
+    dir: ${config_dir:}/outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+trainer:
+  max_epochs: 500
+  benchmark: true
+  gpus: 1
