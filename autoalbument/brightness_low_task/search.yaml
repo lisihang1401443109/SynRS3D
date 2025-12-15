@@ -4,7 +4,7 @@ _version: 2
 task: semantic_segmentation
 
 policy_model:
-  task_factor: 0.01 # Reduced to prioritize discriminator (User updated from 0.001)
+  task_factor: 0.01
   gp_factor: 10
   temperature: 0.05
   num_sub_policies: 1
@@ -12,6 +12,7 @@ policy_model:
   operation_count: 3
   operations:
     - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
 
 semantic_segmentation_model:
   _target_: autoalbument.faster_autoaugment.models.SemanticSegmentationModel

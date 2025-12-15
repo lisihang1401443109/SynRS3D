@@ -35,7 +35,6 @@ class AutoAlbumentDataset(Dataset):
             max_samples: Maximum number of samples to use (for debugging)
             num_classes: Number of classes in the segmentation task
         """
-        print(f"DEBUG: Initializing AutoAlbumentDataset with num_classes={num_classes}")
         self.root = root
         self.image_dir = os.path.join(root, image_dir)
         self.mask_dir = os.path.join(root, mask_dir)
