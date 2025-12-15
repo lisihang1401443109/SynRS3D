@@ -23,7 +23,7 @@ class AutoAlbumentDataset(Dataset):
         split_file: str = "train.txt",
         transform: Optional[Any] = None,
         max_samples: Optional[int] = None,
-        num_classes: int = 5,
+        num_classes: int = 8,
     ):
         """
         Args:
@@ -35,6 +35,7 @@ class AutoAlbumentDataset(Dataset):
             max_samples: Maximum number of samples to use (for debugging)
             num_classes: Number of classes in the segmentation task
         """
+        print(f"DEBUG: Initializing AutoAlbumentDataset with num_classes={num_classes}")
         self.root = root
         self.image_dir = os.path.join(root, image_dir)
         self.mask_dir = os.path.join(root, mask_dir)
