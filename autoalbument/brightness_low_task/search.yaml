@@ -73,7 +73,7 @@ optim:
 
   policy:
     _target_: torch.optim.Adam
-    lr: 1e-33
+    lr: 1e-3
     betas: [0, 0.999]
 
 seed: 42
