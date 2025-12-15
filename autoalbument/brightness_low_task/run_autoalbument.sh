@@ -27,6 +27,9 @@ log "Configuration directory: $(pwd)"
 log "Output directory: $OUTPUT_DIR"
 log "Log file: $LOG_FILE"
 
+# Ensure local dataset.py is found first
+export PYTHONPATH=$(pwd):$PYTHONPATH
+
 # Run AutoAlbument search
 CONFIG_DIR=$(pwd)
 # check if config dir ends with brightness_low_task
