@@ -43,7 +43,9 @@ spec:
 
               echo "Pulling nested autoalbument repo..."
               cd autoalbument
-              git clone https://github.com/lisihang1401443109/autoalbument.git
+              if [ ! -d "autoalbument" ]; then
+                  git clone https://github.com/lisihang1401443109/autoalbument.git
+              fi
               git pull
               cd ..
 

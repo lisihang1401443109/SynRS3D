@@ -30,6 +30,9 @@ log "Log file: $LOG_FILE"
 # Ensure local dataset.py is found first
 export PYTHONPATH=$(pwd):$PYTHONPATH
 
+# Debug: Check which dataset is being imported
+python -c "import sys; print('SYS.PATH:', sys.path); import dataset; print('DATASET FILE:', dataset.__file__)"
+
 # Run AutoAlbument search
 CONFIG_DIR=$(pwd)
 # check if config dir ends with brightness_low_task
