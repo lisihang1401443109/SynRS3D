@@ -1,0 +1,52 @@
+{
+    "__version__": "1.3.1",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "always_apply": false,
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "always_apply": false,
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "RandomBrightnessContrast",
+                "always_apply": false,
+                "p": 0.7541198587727393,
+                "brightness_limit": [
+                    -0.2883080244064331,
+                    -0.2883080244064331
+                ],
+                "contrast_limit": [
+                    0,
+                    0
+                ],
+                "brightness_by_max": true
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}

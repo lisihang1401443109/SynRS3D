@@ -1,0 +1,157 @@
+{
+    "__version__": "1.4.18",
+    "transform": {
+        "__class_fullname__": "Compose",
+        "p": 1.0,
+        "transforms": [
+            {
+                "__class_fullname__": "LongestMaxSize",
+                "p": 1.0,
+                "max_size": [
+                    392
+                ],
+                "interpolation": 1
+            },
+            {
+                "__class_fullname__": "PadIfNeeded",
+                "p": 1.0,
+                "min_height": 392,
+                "min_width": 392,
+                "pad_height_divisor": null,
+                "pad_width_divisor": null,
+                "position": "center",
+                "border_mode": 0,
+                "value": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "mask_value": null
+            },
+            {
+                "__class_fullname__": "OneOf",
+                "p": 1,
+                "transforms": [
+                    {
+                        "__class_fullname__": "Sequential",
+                        "p": 1.0,
+                        "transforms": [
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.9999997615814209,
+                                        "brightness_limit": [
+                                            -1.0,
+                                            -1.0
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 7.700240244640446e-08,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            1.7629445791244507,
+                                            1.7629445791244507
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 1.614161766472222e-07
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.00014472221154663862,
+                                        "brightness_limit": [
+                                            -0.6759876608848572,
+                                            -0.6759876608848572
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.0,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            4.9053778648376465,
+                                            4.9053778648376465
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.9998552777884534
+                                    }
+                                ]
+                            },
+                            {
+                                "__class_fullname__": "OneOf",
+                                "p": 1.0,
+                                "transforms": [
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.5095937540787929,
+                                        "brightness_limit": [
+                                            -9.578466415405273e-05,
+                                            -9.578466415405273e-05
+                                        ],
+                                        "contrast_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "RandomBrightnessContrast",
+                                        "p": 0.010319618596092539,
+                                        "brightness_limit": [
+                                            0,
+                                            0
+                                        ],
+                                        "contrast_limit": [
+                                            0.0,
+                                            0.0
+                                        ],
+                                        "brightness_by_max": true
+                                    },
+                                    {
+                                        "__class_fullname__": "NoOp",
+                                        "p": 0.48008662732511453
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "bbox_params": null,
+        "keypoint_params": null,
+        "additional_targets": {},
+        "is_check_shapes": true
+    }
+}
