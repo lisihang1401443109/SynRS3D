@@ -27,7 +27,7 @@ data:
     root: /mnt/synrs3d/SynRS3D/data/grid_g05_mid_v1
     image_dir: opt
     mask_dir: gt_ss_mask
-    split_file: subset_train.txt
+    split_file: subset_train_source.txt
     num_classes: 8
 
   target_dataset:
@@ -35,7 +35,7 @@ data:
     root: /mnt/synrs3d/SynRS3D/data/grid_g05_mid_v1
     image_dir: opt
     mask_dir: gt_ss_mask
-    split_file: subset_train.txt
+    split_file: subset_train_target.txt
     num_classes: 8
 
   target_preprocessing:
