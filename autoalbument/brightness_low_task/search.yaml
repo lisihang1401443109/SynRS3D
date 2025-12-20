@@ -8,11 +8,11 @@ policy_model:
   gp_factor: 10
   temperature: 0.05
   num_sub_policies: 1
-  num_chunks: 2
+  num_chunks: 8
   operation_count: 1
   operations:
-    - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
-    # - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
+    # - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomBrightness
+    - _target_: autoalbument.faster_autoaugment.models.policy_operations.RandomContrast
 
 semantic_segmentation_model:
   _target_: autoalbument.faster_autoaugment.models.SemanticSegmentationModel
@@ -40,19 +40,22 @@ data:
 
   target_preprocessing:
     - RandomBrightnessContrast:
-        brightness_limit: [0.12, 0.12]
-        contrast_limit: [0.0, 0.0]
+        brightness_limit: [0, 0]
+        contrast_limit: [0.3, 0.3]
         p: 1.0
 
   input_dtype: float32
   preprocessing:
-    - LongestMaxSize:
-        max_size: 392
-    - PadIfNeeded:
-        min_height: 392
-        min_width: 392
-        border_mode: 0
-        value: [0, 0, 0]
+    # - LongestMaxSize:
+    #     max_size: 392
+    # - PadIfNeeded:
+    #     min_height: 392
+    #     min_width: 392
+    #     border_mode: 0
+    #     value: [0, 0, 0]
+    RandomCrop:
+      height: 392
+      width: 392
 
   normalization:
     mean: [123.675, 116.28, 103.53]
