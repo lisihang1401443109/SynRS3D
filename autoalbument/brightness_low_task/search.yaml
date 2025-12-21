@@ -53,9 +53,9 @@ data:
     #     min_width: 392
     #     border_mode: 0
     #     value: [0, 0, 0]
-    RandomCrop:
-      height: 392
-      width: 392
+    - RandomCrop:
+        height: 392
+        width: 392
 
   normalization:
     mean: [123.675, 116.28, 103.53]
